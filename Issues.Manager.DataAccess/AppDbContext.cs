@@ -6,12 +6,10 @@ namespace Issues.Manager.DataAccess;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-        
-    }
+    {}
 
     
     public DbSet<Issue> Issues { get; set; }
-    public DbSet<User> Type { get; set; }
+    public DbSet<User> Users { get; set; }
     
 }
