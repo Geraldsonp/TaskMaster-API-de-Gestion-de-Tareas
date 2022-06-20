@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Issues.Manager.Business\Issues.Manager.Business.csproj" />
       <ProjectReference Include="..\Issues.Manager.DataAccess\Issues.Manager.DataAccess.csproj" />
     </ItemGroup>
 

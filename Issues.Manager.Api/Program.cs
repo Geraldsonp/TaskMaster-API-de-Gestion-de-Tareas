@@ -1,10 +1,15 @@
+using Issues.Manager.Api.CustomMiddleware;
+using Issues.Manager.Business.Abstractions.LoggerContract;
+using Issues.Manager.Business.Services.Logger;
 using Issues.Manager.DataAccess;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Nlog.config"));
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddControllers();
 builder.Services.AddDataAccessLayerDependencies(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,6 +25,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
