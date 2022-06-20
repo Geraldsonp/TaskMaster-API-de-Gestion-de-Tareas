@@ -14,4 +14,9 @@
       <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs" />
+      <Folder Include="MappingConfigs" />
+    </ItemGroup>
+
 </Project>
