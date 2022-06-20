@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Issue.Manager.DataAccess</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.5.22302.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0-preview.5.22302.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-preview.5.22302.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Issues.Manager.Domain\Issues.Manager.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
