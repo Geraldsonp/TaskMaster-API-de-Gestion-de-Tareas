@@ -14,31 +14,57 @@ public class IssueRepository : IRepositoryBase<Issue>
     }
     public Issue Create(Issue entity)
     {
-        throw new NotImplementedException();
+        
+        return _context.Issues.Add(entity).Entity;
     }
 
-    public int Delete(Issue entity)
+    public int Delete(int id)
     {
-        throw new NotImplementedException();
+        var issue = _context.Issues.Find(id);
+        if (issue is not null)
+        {
+            _context.Issues.Remove(issue);
+            return _context.SaveChanges();
+        }
+        else
+        {
+            throw new NullReferenceException("Issue Does not exist in the database");
+        }
+        
     }
 
     public Issue Update(Issue entity)
     {
-        throw new NotImplementedException();
+        return _context.Issues.Update(entity).Entity;
     }
 
-    public Issue GetById(Issue entity)
+    public Issue GetById(int id)
     {
-        throw new NotImplementedException();
+                
+        var issue = _context.Issues.Find(id);
+        if (issue is not null)
+        {
+            return issue; 
+        }
+        else
+            throw new Exception("Issue Not Found in the database");
     }
 
     public IEnumerable<Issue> GetAll()
     {
-        throw new NotImplementedException();
+        var issues = _context.Issues.ToList();
+        return issues;
     }
 
     public Issue FindByConditionAsync(Expression<Func<Issue, bool>> predicate)
     {
-        throw new NotImplementedException();
+        var issue = _context.Issues.FirstOrDefault(predicate);
+        if (issue is not null)
+        {
+            return issue;
+        }
+        else
+            throw new Exception("Issue Not Found in the database");
+
     }
 }
