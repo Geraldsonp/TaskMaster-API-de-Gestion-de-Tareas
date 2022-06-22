@@ -14,8 +14,9 @@ public class IssueRepository : IRepositoryBase<Issue>
     }
     public Issue Create(Issue entity)
     {
-        
-        return _context.Issues.Add(entity).Entity;
+        var result =  _context.Issues.Add(entity);
+        _context.SaveChanges();
+        return result.Entity;
     }
 
     public int Delete(int id)
@@ -35,7 +36,10 @@ public class IssueRepository : IRepositoryBase<Issue>
 
     public Issue Update(Issue entity)
     {
-        return _context.Issues.Update(entity).Entity;
+        
+            var result = _context.Issues.Update(entity);
+            _context.SaveChanges();
+            return result.Entity;
     }
 
     public Issue GetById(int id)

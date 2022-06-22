@@ -1,4 +1,5 @@
 using Issues.Manager.Api.CustomMiddleware;
+using Issues.Manager.Business;
 using Issues.Manager.Business.Abstractions.LoggerContract;
 using Issues.Manager.Business.Services.Logger;
 using Issues.Manager.DataAccess;
@@ -12,6 +13,7 @@ LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Nl
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddControllers();
 builder.Services.AddDataAccessLayerDependencies(builder.Configuration);
+builder.Services.AddBusinessLayerDependencies();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

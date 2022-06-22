@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Issues.Manager.Business.Abstractions.RepositoryContracts;
+using Issues.Manager.DataAccess.Repositories;
+using Issues.Manager.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,10 +15,8 @@ public static class DependenciesContainer
     {
         var connection  = config.GetConnectionString("DefaultSQLite");
         services.AddDbContext<AppDbContext>(o => o.UseSqlite(connection, 
-            builder=> builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
-        /*services.AddSqlite<AppDbContext>(connection ?? throw new InvalidOperationException(
-                message:"Connection String is null")
-            , builder  => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));*/
+            builder=> builder.MigrationsAssembly("Issues.Manager.DataAccess")));
+        services.AddTransient<IRepositoryBase<Issue>, IssueRepository>();
         return services;
     }
     

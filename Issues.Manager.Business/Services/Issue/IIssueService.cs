@@ -1,12 +1,13 @@
-﻿using Issues.Manager.Domain.Entities;
+﻿using Issues.Manager.Business.DTOs;
+using Issues.Manager.Domain.Entities;
 
 namespace Issues.Manager.Business.Services;
 
 public interface IIssueService
 {
-    Issue Create(Issue issue);
-    Issue GetById(int id);
-    IEnumerable<Issue> GetAll();
-    Issue Update(Issue issue);
+    IssueDto Create(CreateIssueDto issueDto);
+    IssueDto GetById(int id);
+    IEnumerable<IssueDto> GetAll();
+    IssueDto Update(IssueDto issueDto);
     bool Delete(int id);
 }
