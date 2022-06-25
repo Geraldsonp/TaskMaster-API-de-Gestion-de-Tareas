@@ -9,6 +9,7 @@ public class Issue : BaseEntity
     public string Description { get; set; }
     public Priority Priority { get; set; }
     public IssueType IssueType { get; set; }
+    public bool IsCompleted { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Completed { get; set; }
     

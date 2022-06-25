@@ -26,6 +26,7 @@ namespace Issues.Manager.Api.Controllers
         [HttpGet]
         public IEnumerable<IssueDto> Get()
         {
+            _loggerManager.LogDebug("Getting All The Issues");
             return _issueService.GetAll();
         }
 
@@ -33,6 +34,7 @@ namespace Issues.Manager.Api.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IssueDto Get(int id)
         {
+            _loggerManager.LogDebug($"Trying to get issue ID:{id}");
             var issueDto = _issueService.GetById(id);
             return issueDto;
         }
@@ -41,13 +43,16 @@ namespace Issues.Manager.Api.Controllers
         [HttpPost]
         public IssueDto Post([FromBody] CreateIssueDto createdIssueDto)
         {
-            return _issueService.Create(createdIssueDto);
+            var result =  _issueService.Create(createdIssueDto);
+            _loggerManager.LogDebug("Creating Issue");
+            return result;
         }
 
         // PUT: api/Issue/5
         [HttpPut("{id}")]
         public IssueDto Put(int id, [FromBody] IssueDto issueDtoToUpdate)
         {
+            _loggerManager.LogDebug($"Attempting to Update issue id: {id}");
             var result = _issueService.Update(issueDtoToUpdate);
             return result;
         }

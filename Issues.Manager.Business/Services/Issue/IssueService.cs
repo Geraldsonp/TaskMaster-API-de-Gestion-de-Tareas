@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Issues.Manager.Business.Abstractions.LoggerContract;
 using Issues.Manager.Business.Abstractions.RepositoryContracts;
 using Issues.Manager.Business.DTOs;
 using Issues.Manager.Domain.Entities;
@@ -9,11 +10,13 @@ public class IssueService : IIssueService
 {
     private readonly IRepositoryBase<Issue> _issueRepository;
     private readonly IMapper _mapper;
+    private readonly ILoggerManager _loggerManager;
 
-    public IssueService(IRepositoryBase<Issue> issueRepository, IMapper mapper)
+    public IssueService(IRepositoryBase<Issue> issueRepository, IMapper mapper, ILoggerManager loggerManager)
     {
         _issueRepository = issueRepository;
         _mapper = mapper;
+        _loggerManager = loggerManager;
     }
     public IssueDto Create(CreateIssueDto issueDto)
     {
@@ -28,9 +31,11 @@ public class IssueService : IIssueService
         var issue = _issueRepository.GetById(id);
         if (issue is null)
         {
+            _loggerManager.LogError($"Issue With ID: {id} Does not Exist");
             throw new NullReferenceException($"The Issue with id {id} Does not exist in the database");
+            
         }
-
+        _loggerManager.LogError($"Fetched issue Id: {id} successfully");
         return _mapper.Map<IssueDto>(issue);
     }
 

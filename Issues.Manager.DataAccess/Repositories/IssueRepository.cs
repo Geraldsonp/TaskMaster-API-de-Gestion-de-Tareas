@@ -14,9 +14,14 @@ public class IssueRepository : IRepositoryBase<Issue>
     }
     public Issue Create(Issue entity)
     {
-        var result =  _context.Issues.Add(entity);
-        _context.SaveChanges();
-        return result.Entity;
+        
+        var issue = _context.Issues.Add(entity);
+        var result = _context.SaveChanges();
+        if (result == 0)
+        {
+            return new Issue();
+        }
+        return issue.Entity;
     }
 
     public int Delete(int id)
