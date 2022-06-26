@@ -1,4 +1,6 @@
 using Issues.Manager.Business.Abstractions.LoggerContract;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers;
@@ -19,7 +21,7 @@ public class WeatherForecastController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet(Name = "GetWeatherForecast"), Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IEnumerable<WeatherForecast> Get()
     {
 

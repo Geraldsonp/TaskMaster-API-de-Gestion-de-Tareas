@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using Issues.Manager.Business.DTOs;
 using Issues.Manager.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Issues.Manager.Business.MappingConfigs;
 
-public class IssueMappingConfig : Profile
+public class MappingProfiles : Profile
 {
-    public IssueMappingConfig()
+    public MappingProfiles()
     {
         CreateMap<Issue, IssueDto>();
         CreateMap<CreateIssueDto, Issue>();
+        CreateMap<UserRegistrationDto, IdentityUser>();
     }
 }
