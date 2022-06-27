@@ -6,9 +6,9 @@ namespace Issues.Manager.Business.Abstractions.RepositoryContracts;
 public interface IRepositoryBase<T> where T : BaseEntity
 {
     T Create(T entity);
-    int Delete(int id);
+    int Delete(T entity);
     T Update(T entity);
     T GetById(int id);
-    IEnumerable<T> GetAll();
+    IEnumerable<T> GetAll(int userId);
     T FindByConditionAsync(Expression<Func<T, bool>> predicate);
 }

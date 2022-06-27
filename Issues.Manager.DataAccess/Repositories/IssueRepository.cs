@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Issues.Manager.Business.Abstractions.RepositoryContracts;
 using Issues.Manager.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Issues.Manager.DataAccess.Repositories;
 
@@ -24,19 +25,11 @@ public class IssueRepository : IRepositoryBase<Issue>
         return issue.Entity;
     }
 
-    public int Delete(int id)
+    public int Delete(Issue issueToDelete)
     {
-        var issue = _context.Issues.Find(id);
-        if (issue is not null)
-        {
-            _context.Issues.Remove(issue);
+
+            _context.Issues.Remove(issueToDelete);
             return _context.SaveChanges();
-        }
-        else
-        {
-            throw new NullReferenceException("Issue Does not exist in the database");
-        }
-        
     }
 
     public Issue Update(Issue entity)
@@ -59,9 +52,9 @@ public class IssueRepository : IRepositoryBase<Issue>
             throw new Exception("Issue Not Found in the database");
     }
 
-    public IEnumerable<Issue> GetAll()
+    public IEnumerable<Issue> GetAll(int userId)
     {
-        var issues = _context.Issues.ToList();
+        var issues = _context.Issues.Where(i => i.UserId == userId).AsNoTracking().ToList();
         return issues;
     }
 
@@ -70,10 +63,10 @@ public class IssueRepository : IRepositoryBase<Issue>
         var issue = _context.Issues.FirstOrDefault(predicate);
         if (issue is not null)
         {
-            return issue;
+            return new Issue();
         }
-        else
-            throw new Exception("Issue Not Found in the database");
+
+        return issue!;
 
     }
 }

@@ -5,5 +5,6 @@ namespace Issues.Manager.Business.Abstractions.RepositoryContracts;
 public interface IUserRepository
 {
     void Create(User entity);
-    User GetById(int id);
+    User GetById(string id);
+    bool SaveChanges();
 }

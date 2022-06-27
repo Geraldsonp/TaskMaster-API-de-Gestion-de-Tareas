@@ -1,11 +1,13 @@
 using Issues.Manager.Business.Abstractions.LoggerContract;
 using Issues.Manager.Business.DTOs;
 using Issues.Manager.Business.Services.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers
 {
     [Route("api/[controller]")]
+    [AllowAnonymous]
     [ApiController]
     public class UserController : ControllerBase
     {

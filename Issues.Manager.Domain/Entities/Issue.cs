@@ -12,5 +12,6 @@ public class Issue : BaseEntity
     public bool IsCompleted { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Completed { get; set; }
+    public int UserId { get; set; }
     
 }
