@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Issues.Manager.Api.Models;
-using Issues.Manager.Business.Abstractions.LoggerContract;
+using Issues.Manager.Application.Services.Logger;
 
 namespace Issues.Manager.Api.CustomMiddleware;
 
@@ -24,7 +24,7 @@ public class ExceptionMiddleware
         catch (Exception e)
         {
             _logger.LogError($"Something went wrong: {e}");
-            await HandleExceptionAsync(httpContext, e.InnerException);
+            await HandleExceptionAsync(httpContext, e);
         }
         //todo: Create New Exception to show custom messages
         

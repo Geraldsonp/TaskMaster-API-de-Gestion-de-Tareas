@@ -1,6 +1,6 @@
-using Issues.Manager.Business.Abstractions.LoggerContract;
-using Issues.Manager.Business.DTOs;
-using Issues.Manager.Business.Services.Account;
+using Issues.Manager.Application.DTOs;
+using Issues.Manager.Application.Services.Identity;
+using Issues.Manager.Application.Services.Logger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +11,13 @@ namespace Issues.Manager.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IAccountManager _accountManager;
+        private readonly IIdentityManager _identityManager;
         private readonly ILoggerManager _loggerManager;
 
-        public UserController(IAccountManager accountManager,
+        public UserController(IIdentityManager identityManager,
             ILoggerManager loggerManager)
         {
-            _accountManager = accountManager;
+            _identityManager = identityManager;
             _loggerManager = loggerManager;
         }
         
@@ -27,7 +27,7 @@ namespace Issues.Manager.Api.Controllers
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto
             userForRegistration)
         {
-            var result = await _accountManager.CreateUser(userForRegistration);
+            var result = await _identityManager.Create(userForRegistration);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -44,13 +44,13 @@ namespace Issues.Manager.Api.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLogInDto userLogInDto)
         {
-            if (!await _accountManager.ValidateUser(userLogInDto))
+            if (!await _identityManager.ValidateUser(userLogInDto))
             {
                 _loggerManager.LogWarn($"{nameof(Login)}: Authentication Failed. Wrong Username or password");
                 return Unauthorized();
             }
 
-            return Ok(new { Token = await _accountManager.CreateToken() });
+            return Ok(new { Token = await _identityManager.CreateToken() });
 
         }
     

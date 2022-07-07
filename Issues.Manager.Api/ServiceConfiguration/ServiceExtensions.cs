@@ -1,12 +1,7 @@
 ﻿using System.Text;
-using Issues.Manager.Business.Abstractions.RepositoryContracts;
-using Issues.Manager.DataAccess;
-using Issues.Manager.DataAccess.Repositories;
-using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Issues.Manager.Api.ServiceConfiguration;
 
@@ -16,44 +11,46 @@ public static class ServiceExtensions
     {
         var secretKey = configuration.GetSection("JwtSecretKey").Value;
         var jwtSettings = configuration.GetSection("JwtSettings");
-
-
         services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                }
+            );
+        services.AddSwaggerGen(opt =>
+        {
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+            opt.AddSecurityDefinition("Bearer", new ()
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-
+                In = ParameterLocation.Header,
+                Description = "Please enter token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
             });
-
-    }
-
-    public static IServiceCollection ConfigureDataAccessLayer(this IServiceCollection services,
-        IConfiguration config)
-    {
-        var connection  = config.GetConnectionString("DefaultSQLite");
-        services.AddDbContext<AppDbContext>(o => o.UseSqlite(connection, 
-            builder=> builder.MigrationsAssembly("Issues.Manager.DataAccess")));
-        services.AddScoped<IRepositoryBase<Issue>, IssueRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddIdentityCore<IdentityUser>(
-            o =>
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-                o.Password.RequireDigit = true;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
-                o.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<AppDbContext>();
-        return services;
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
+        });
     }
 }

@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Issues.Manager.Business\Issues.Manager.Business.csproj" />
-      <ProjectReference Include="..\Issues.Manager.DataAccess\Issues.Manager.DataAccess.csproj" />
+      <ProjectReference Include="..\Issues.Manager.Application\Issues.Manager.Application.csproj" />
+      <ProjectReference Include="..\Issues.Manager.Infrastructure\Issues.Manager.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

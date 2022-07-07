@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using Issues.Manager.Business.Abstractions.LoggerContract;
-using Issues.Manager.Business.DTOs;
-using Issues.Manager.Business.Services;
+using Issues.Manager.Application.DTOs;
+using Issues.Manager.Application.Services;
+using Issues.Manager.Application.Services.Logger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers
@@ -24,7 +24,7 @@ namespace Issues.Manager.Api.Controllers
         public ActionResult<IEnumerable<IssueDto>>  Get()
         {  _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _loggerManager.LogDebug("Getting All The Issues");
-            return Ok(_issueService.GetAll(_userId));
+            return Ok(_issueService.GetAll());
         }
 
         // GET: api/Issue/5
@@ -33,7 +33,7 @@ namespace Issues.Manager.Api.Controllers
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _loggerManager.LogDebug($"Trying to get issue ID:{id}");
-            var issueDto = _issueService.GetById(id , _userId);
+            var issueDto = _issueService.GetById(id);
             return Ok(issueDto);
         }
 
@@ -61,12 +61,8 @@ namespace Issues.Manager.Api.Controllers
         public ActionResult Delete(int id)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _issueService.Delete(id, _userId);
-            if (!result)
-            {
-                return NoContent();
-            }
-            return StatusCode(202);
+            _issueService.Delete(id);
+            return Ok();
         }
     }
 }

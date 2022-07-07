@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.Domain", "Issues.Manager.Domain\Issues.Manager.Domain.csproj", "{4CBF5B53-5004-4C98-8208-DB51FB53A394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.Business", "Issues.Manager.Business\Issues.Manager.Business.csproj", "{0FF5FB6B-EB0E-41F5-BC8A-5E65DEA05510}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.Application", "Issues.Manager.Application\Issues.Manager.Application.csproj", "{0FF5FB6B-EB0E-41F5-BC8A-5E65DEA05510}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.DataAccess", "Issues.Manager.DataAccess\Issues.Manager.DataAccess.csproj", "{AE809751-3EDA-4D8D-A8CC-B15AD5808D81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.Infrastructure", "Issues.Manager.Infrastructure\Issues.Manager.Infrastructure.csproj", "{AE809751-3EDA-4D8D-A8CC-B15AD5808D81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Issues.Manager.Api", "Issues.Manager.Api\Issues.Manager.Api.csproj", "{850A8958-A329-4EEA-B534-DE1E7E41340D}"
 EndProject

@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Issues.Manager.Business.Abstractions.LoggerContract;
+using Issues.Manager.Application.Services.Logger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
