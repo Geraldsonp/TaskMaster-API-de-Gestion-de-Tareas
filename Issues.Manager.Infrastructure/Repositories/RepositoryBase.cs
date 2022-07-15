@@ -16,7 +16,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntit
     }
     public void Create(T entity)
     { 
-        _dbContext.Set<T>().Add(entity);
+         _dbContext.Set<T>().Add(entity);
     }
 
     public void Delete(T entity)

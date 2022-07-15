@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Issues.Manager.Api.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,7 +8,7 @@ namespace Issues.Manager.Api.ServiceConfiguration;
 
 public static class ServiceExtensions
 {
-    public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
     {
         var secretKey = configuration.GetSection("JwtSecretKey").Value;
         var jwtSettings = configuration.GetSection("JwtSettings");
@@ -25,9 +26,15 @@ public static class ServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 }
             );
+        
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
         services.AddSwaggerGen(opt =>
         {
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+            opt.EnableAnnotations();
             opt.AddSecurityDefinition("Bearer", new ()
             {
                 In = ParameterLocation.Header,
@@ -52,5 +59,10 @@ public static class ServiceExtensions
                 }
             });
         });
+    }
+
+    public static void ConfigureFilters(this IServiceCollection services)
+    {
+        services.AddScoped<IsModelValidFilterAttribute>();
     }
 }

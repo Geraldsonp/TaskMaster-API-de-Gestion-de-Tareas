@@ -1,3 +1,4 @@
+using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services.Identity;
 using Issues.Manager.Application.Services.Logger;
@@ -24,6 +25,7 @@ namespace Issues.Manager.Api.Controllers
         
         // POST: User/Register
         [HttpPost]
+        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto
             userForRegistration)
         {
@@ -42,6 +44,7 @@ namespace Issues.Manager.Api.Controllers
         }
 
         [HttpPost("Login")]
+        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public async Task<IActionResult> Login([FromBody] UserLogInDto userLogInDto)
         {
             if (!await _identityManager.ValidateUser(userLogInDto))

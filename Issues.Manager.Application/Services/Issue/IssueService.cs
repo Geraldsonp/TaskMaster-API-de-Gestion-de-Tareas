@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Issues.Manager.Application.Abstractions.RepositoryContracts;
 using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Services.Logger;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
 
@@ -11,30 +10,23 @@ public class IssueService : IIssueService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
-    private readonly ILoggerManager _loggerManager;
 
 
     public IssueService(
-        IRepositoryManager _repositoryManager,
-        IMapper mapper,
-        ILoggerManager loggerManager)
+        IRepositoryManager repositoryManager,
+        IMapper mapper)
     {
-        
-        this._repositoryManager = _repositoryManager;
+        this._repositoryManager = repositoryManager;
         _mapper = mapper;
-        _loggerManager = loggerManager;
-
     }
 
     public IssueDto Create(CreateIssueDto createIssueDto, string identityId)
     {
         var userId = _repositoryManager.User
             .FindByCondition(u => 
-                    u.IdentityId == identityId,
-                false).Id;
+                    u.IdentityId == identityId).Id;
         
         var issueToSave = _mapper.Map<Issue>(createIssueDto);
-        issueToSave.Created = DateTime.Now;
         issueToSave.UserId = userId;
         _repositoryManager.Issue.Create(issueToSave);
         _repositoryManager.SaveChanges();
@@ -54,7 +46,6 @@ public class IssueService : IIssueService
 
     public IEnumerable<IssueDto> GetAll( bool trackChanges = false)
     {
-        //todo: Implement Pagination and sorting
         var issues = _repositoryManager.Issue.FindAll(trackChanges).ToList();
         var issuesDtos = _mapper.Map<IEnumerable<IssueDto>>(issues);
         return issuesDtos;
@@ -79,6 +70,5 @@ public class IssueService : IIssueService
         _repositoryManager.Issue.Delete(issueToDelete);
         _repositoryManager.SaveChanges();
     }
-    //todo: Implement Marking Complete
-    
+
 }

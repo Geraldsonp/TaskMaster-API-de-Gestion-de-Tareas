@@ -27,11 +27,12 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<IdentityUser>().HasOne<User>().WithOne(u => u.IdentityUser)
             .HasForeignKey<User>(u => u.IdentityId);
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
-        
-        
         modelBuilder.Entity<Issue>()
                 .HasQueryFilter(i => i.UserId == _httpAccessor.GetCurrentIdentityId() );
     }
+    
+    
+    
     public DbSet<Issue> Issues { get; set; }
     public DbSet<User> AppUsers { get; set; }
     

@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Api.CustomMiddleware;
 using Issues.Manager.Api.ServiceConfiguration;
 using Issues.Manager.Application;
 using Issues.Manager.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,15 +14,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddApplicationLayer();
 builder.Services.AddAuthentication();
-builder.Services.AddControllers();
-
+builder.Services.ConfigureSwagger();
+builder.Services.ConfigureFilters();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
+builder.Services.AddControllers().AddJsonOptions(
+    opts =>
+    {
+        var enumConverter = new JsonStringEnumConverter();
+        opts.JsonSerializerOptions.Converters.Add(enumConverter);
+    });;
 
 
 var app = builder.Build();

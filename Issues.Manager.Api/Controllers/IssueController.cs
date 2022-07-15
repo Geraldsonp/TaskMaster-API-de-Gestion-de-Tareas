@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services;
 using Issues.Manager.Application.Services.Logger;
@@ -28,9 +29,10 @@ namespace Issues.Manager.Api.Controllers
         }
 
         // GET: api/Issue/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetById")]
         public ActionResult<IssueDto> Get(int id)
         {
+            
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _loggerManager.LogDebug($"Trying to get issue ID:{id}");
             var issueDto = _issueService.GetById(id);
@@ -39,19 +41,21 @@ namespace Issues.Manager.Api.Controllers
 
         // POST: api/Issue
         [HttpPost]
+        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public ActionResult<IssueDto>  Post([FromBody] CreateIssueDto createdIssueDto)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result =  _issueService.Create(createdIssueDto, _userId);
-            _loggerManager.LogDebug("Creating Issue");
-            return Ok(result);
+            _loggerManager.LogInfo("Creating Issue");
+            return CreatedAtRoute("GetById", new {id = result.Id}, result);
         }
 
         // PUT: api/Issue/5
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public ActionResult<IssueDto>  Put(int id, [FromBody] IssueDto issueDtoToUpdate)
         {
-            _loggerManager.LogDebug($"Attempting to Update issue id: {id}");
+            _loggerManager.LogInfo($"Attempting to Update issue id: {id}");
             var result = _issueService.Update(issueDtoToUpdate);
             return Ok(result);
         }
@@ -60,7 +64,6 @@ namespace Issues.Manager.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _issueService.Delete(id);
             return Ok();
         }
