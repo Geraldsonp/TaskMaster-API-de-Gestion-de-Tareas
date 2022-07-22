@@ -22,7 +22,7 @@ namespace Issues.Manager.Api.Controllers
         }
         // GET: api/Issue
         [HttpGet]
-        public ActionResult<IEnumerable<IssueDto>>  Get()
+        public ActionResult<IEnumerable<IssueReponse>>  Get()
         {  _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _loggerManager.LogDebug("Getting All The Issues");
             return Ok(_issueService.GetAll());
@@ -30,7 +30,7 @@ namespace Issues.Manager.Api.Controllers
 
         // GET: api/Issue/5
         [HttpGet("{id}", Name = "GetById")]
-        public ActionResult<IssueDto> Get(int id)
+        public ActionResult<IssueReponse> Get(int id)
         {
             
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -42,10 +42,10 @@ namespace Issues.Manager.Api.Controllers
         // POST: api/Issue
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<IssueDto>  Post([FromBody] CreateIssueDto createdIssueDto)
+        public ActionResult<IssueReponse>  Post([FromBody] CreateIssueRequest createdIssueRequest)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result =  _issueService.Create(createdIssueDto, _userId);
+            var result =  _issueService.Create(createdIssueRequest, _userId);
             _loggerManager.LogInfo("Creating Issue");
             return CreatedAtRoute("GetById", new {id = result.Id}, result);
         }
@@ -53,10 +53,10 @@ namespace Issues.Manager.Api.Controllers
         // PUT: api/Issue/5
         [HttpPut("{id}")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<IssueDto>  Put(int id, [FromBody] IssueDto issueDtoToUpdate)
+        public ActionResult<IssueReponse>  Put(int id, [FromBody] IssueReponse issueReponseToUpdate)
         {
             _loggerManager.LogInfo($"Attempting to Update issue id: {id}");
-            var result = _issueService.Update(issueDtoToUpdate);
+            var result = _issueService.Update(issueReponseToUpdate);
             return Ok(result);
         }
 

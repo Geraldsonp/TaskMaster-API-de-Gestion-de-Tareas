@@ -3,7 +3,7 @@ using Issues.Manager.Domain.Enums;
 
 namespace Issues.Manager.Application.DTOs;
 
-public class CreateIssueDto
+public class CreateIssueRequest
 {
     [Required(ErrorMessage = "Title can not be null.")]
     [MaxLength(50, ErrorMessage = "Max lenght for name is 50 characters")]

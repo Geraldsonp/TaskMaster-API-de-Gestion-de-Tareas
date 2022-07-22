@@ -26,7 +26,7 @@ namespace Issues.Manager.Api.Controllers
         // POST: User/Register
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest
             userForRegistration)
         {
             var result = await _identityManager.Create(userForRegistration);
@@ -45,9 +45,9 @@ namespace Issues.Manager.Api.Controllers
 
         [HttpPost("Login")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public async Task<IActionResult> Login([FromBody] UserLogInDto userLogInDto)
+        public async Task<IActionResult> Login([FromBody] UserLogInRequest userLogInRequest)
         {
-            if (!await _identityManager.ValidateUser(userLogInDto))
+            if (!await _identityManager.ValidateUser(userLogInRequest))
             {
                 _loggerManager.LogWarn($"{nameof(Login)}: Authentication Failed. Wrong Username or password");
                 return Unauthorized();

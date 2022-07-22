@@ -14,8 +14,10 @@ public static class BusinessDependenciesContainer
         services.AddAutoMapper(typeof(BusinessDependenciesContainer));
         services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IIdentityManager, IdentityManager>();
+        services.AddScoped<ICommentService, CommentService>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddSingleton<IHttpAccessor, HttpAccessor>();
+        
         LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Nlog.config"));
         return services;
     }

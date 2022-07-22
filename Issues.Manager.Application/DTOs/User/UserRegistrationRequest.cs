@@ -2,7 +2,7 @@
 
 namespace Issues.Manager.Application.DTOs;
 
-public class UserRegistrationDto
+public class UserRegisterRequest
 {
         [Required(ErrorMessage = "First name is Required")]
         public string? FirstName { get; set; }

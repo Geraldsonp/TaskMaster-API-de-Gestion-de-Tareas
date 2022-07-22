@@ -20,43 +20,43 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public IssueDto Create(CreateIssueDto createIssueDto, string identityId)
+    public IssueReponse Create(CreateIssueRequest createIssueRequest, string identityId)
     {
         var userId = _repositoryManager.User
             .FindByCondition(u => 
                     u.IdentityId == identityId).Id;
         
-        var issueToSave = _mapper.Map<Issue>(createIssueDto);
+        var issueToSave = _mapper.Map<Issue>(createIssueRequest);
         issueToSave.UserId = userId;
         _repositoryManager.Issue.Create(issueToSave);
         _repositoryManager.SaveChanges();
-        return _mapper.Map<IssueDto>(issueToSave);
+        return _mapper.Map<IssueReponse>(issueToSave);
     }
 
-    public IssueDto GetById(int id, bool trackChanges = false)
+    public IssueReponse GetById(int id, bool trackChanges = false)
     {
         var issue = _repositoryManager.Issue.FindByCondition(i => i.Id == id, trackChanges);
         if (issue is null)
         {
             throw new IssueNotFoundException(id);
         }
-        return _mapper.Map<IssueDto>(issue);
+        return _mapper.Map<IssueReponse>(issue);
     }
     
 
-    public IEnumerable<IssueDto> GetAll( bool trackChanges = false)
+    public IEnumerable<IssueReponse> GetAll( bool trackChanges = false)
     {
         var issues = _repositoryManager.Issue.FindAll(trackChanges).ToList();
-        var issuesDtos = _mapper.Map<IEnumerable<IssueDto>>(issues);
+        var issuesDtos = _mapper.Map<IEnumerable<IssueReponse>>(issues);
         return issuesDtos;
     }
 
-    public IssueDto Update(IssueDto issueDto)
+    public IssueReponse Update(IssueReponse issueReponse)
     {
-        var mappedIssue = _mapper.Map<Issue>(issueDto);
+        var mappedIssue = _mapper.Map<Issue>(issueReponse);
         _repositoryManager.Issue.Update(mappedIssue);
         _repositoryManager.SaveChanges();
-        return issueDto;
+        return issueReponse;
     }
 
     public void Delete(int id)

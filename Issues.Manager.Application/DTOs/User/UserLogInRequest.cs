@@ -2,7 +2,7 @@
 
 namespace Issues.Manager.Application.DTOs;
 
-public class UserLogInDto
+public class UserLogInRequest
 {
     [Required(ErrorMessage = "User name is required")]
     public string? UserName { get; set; }

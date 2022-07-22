@@ -17,6 +17,28 @@ namespace Issues.Manager.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0-preview.5.22302.2");
 
+            modelBuilder.Entity("Issues.Manager.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("IssueId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PostedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("Issues.Manager.Domain.Entities.Issue", b =>
                 {
                     b.Property<int>("Id")
@@ -30,6 +52,8 @@ namespace Issues.Manager.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsCompleted")
@@ -42,6 +66,8 @@ namespace Issues.Manager.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -104,15 +130,15 @@ namespace Issues.Manager.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2dc0ac99-042d-468b-b48b-479860ed85cd",
-                            ConcurrencyStamp = "659dab86-69a0-4404-8a49-a11af9b21ef4",
+                            Id = "261fcafe-ecc6-4e65-8896-3af6831f8fb5",
+                            ConcurrencyStamp = "ef9ed44e-48b2-417a-a624-5cf7e9036f95",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "02a9cb06-b6cd-4646-91ac-3f69479133e5",
-                            ConcurrencyStamp = "5c101ea7-827c-4234-a7de-946bada9d032",
+                            Id = "c6c7b8da-4e4c-4df6-9488-a065fde0cb72",
+                            ConcurrencyStamp = "cbba88c0-ee05-427c-a34d-67d9372c862b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -284,6 +310,17 @@ namespace Issues.Manager.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Issues.Manager.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("Issues.Manager.Domain.Entities.Issue", "Issue")
+                        .WithMany("Comments")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Issue");
+                });
+
             modelBuilder.Entity("Issues.Manager.Domain.Entities.Issue", b =>
                 {
                     b.HasOne("Issues.Manager.Domain.Entities.User", null)
@@ -353,6 +390,11 @@ namespace Issues.Manager.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Issues.Manager.Domain.Entities.Issue", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Issues.Manager.Domain.Entities.User", b =>

@@ -35,11 +35,11 @@ public class IdentityManager : IIdentityManager
         _configuration = configuration;
     }
 
-    public async Task<IdentityResult> Create(UserRegistrationDto userRegistrationDto)
+    public async Task<IdentityResult> Create(UserRegisterRequest userRegisterRequest)
     {
-        var user = _mapper.Map<IdentityUser>(userRegistrationDto);
-        _loggerManager.LogInfo($"Creating IdentityUser for: {userRegistrationDto.Email}");
-        var result = await _userManager.CreateAsync(user, userRegistrationDto.Password);
+        var user = _mapper.Map<IdentityUser>(userRegisterRequest);
+        _loggerManager.LogInfo($"Creating IdentityUser for: {userRegisterRequest.Email}");
+        var result = await _userManager.CreateAsync(user, userRegisterRequest.Password);
         if (!result.Succeeded)
         {
             _loggerManager.LogError($"Unable to create IdentityUser");
@@ -50,14 +50,14 @@ public class IdentityManager : IIdentityManager
         User appuser = new()
         {
             IdentityId = user.Id,
-            FullName = String.Concat($"{userRegistrationDto.FirstName} {userRegistrationDto.LastName}")
+            FullName = String.Concat($"{userRegisterRequest.FirstName} {userRegisterRequest.LastName}")
         };
         _repositoryManager.User.Create(appuser);
         _loggerManager.LogInfo($"Creating user for Identity:");
         return result;
     }
 
-    public async Task<bool> ValidateUser(UserLogInDto userForAuth)
+    public async Task<bool> ValidateUser(UserLogInRequest userForAuth)
     {
         _user = await _userManager.FindByNameAsync(userForAuth.UserName);
         return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));

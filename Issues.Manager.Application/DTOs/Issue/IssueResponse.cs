@@ -6,7 +6,7 @@ namespace Issues.Manager.Application.DTOs;
 
 [SwaggerSchema(Required = new[] { "Issue" }, Title = "Issue")]
 
-public class IssueDto
+public class IssueReponse
 {
     [SwaggerSchema("The Issue identifier", ReadOnly = true)]
     public int Id { get; set; }

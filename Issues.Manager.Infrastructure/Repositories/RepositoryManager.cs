@@ -7,10 +7,25 @@ public class RepositoryManager : IRepositoryManager
     private readonly AppDbContext _dbContext;
     private IIssueRepository? _issueRepository;
     private IUserRepository? _userRepository;
+    private ICommentsRepository _commentsRepository;
 
     public RepositoryManager(AppDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public ICommentsRepository Comment
+    {
+        get
+        {
+            if (_commentsRepository == null)
+            {
+                _commentsRepository = new CommentRepository(_dbContext);
+            }
+
+            return _commentsRepository;
+        }
+        
     }
 
     public IIssueRepository Issue

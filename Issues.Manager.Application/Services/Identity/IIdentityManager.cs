@@ -5,8 +5,8 @@ namespace Issues.Manager.Application.Services.Identity;
 
 public interface IIdentityManager
 {
-    Task<IdentityResult> Create(UserRegistrationDto userRegistrationDto);
-    Task<bool> ValidateUser(UserLogInDto userForAuth);
+    Task<IdentityResult> Create(UserRegisterRequest userRegisterRequest);
+    Task<bool> ValidateUser(UserLogInRequest userForAuth);
     Task<string> CreateToken();
 
 }

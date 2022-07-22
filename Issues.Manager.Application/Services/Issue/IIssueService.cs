@@ -4,9 +4,9 @@ namespace Issues.Manager.Application.Services;
 
 public interface IIssueService
 {
-    IssueDto Create(CreateIssueDto issueDto, string userId);
-    IssueDto GetById(int id , bool trackChanges = false);
-    IEnumerable<IssueDto> GetAll(bool trackChanges = false);
-    IssueDto Update(IssueDto issueDto);
+    IssueReponse Create(CreateIssueRequest issueRequest, string userId);
+    IssueReponse GetById(int id , bool trackChanges = false);
+    IEnumerable<IssueReponse> GetAll(bool trackChanges = false);
+    IssueReponse Update(IssueReponse issueReponse);
     void Delete(int id);
 }

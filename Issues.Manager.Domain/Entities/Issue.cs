@@ -17,8 +17,6 @@ public class Issue : BaseEntity
     public IssueType IssueType { get; set; }
     public DateTime Created { get; init; }
     public DateTime? CompletedAt { get; set; }
-    public int UserId { get; set; }
-    
     private bool isCompleted;
 
     public bool IsCompleted
@@ -31,5 +29,8 @@ public class Issue : BaseEntity
             CompletedAt = DateTime.Now;
         }
     }
+    
+    public int UserId { get; set; }
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
 }
