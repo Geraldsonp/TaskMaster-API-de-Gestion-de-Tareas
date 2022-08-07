@@ -3,6 +3,7 @@ using Issues.Manager.Application.Abstractions.RepositoryContracts;
 using Issues.Manager.Application.DTOs.Comment;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
+using Issues.Manager.Domain.ValueObjects;
 
 namespace Issues.Manager.Application.Services;
 
@@ -29,6 +30,17 @@ public class CommentService : ICommentService
         _repositoryManager.SaveChanges();
         var commentReponse = _mapper.Map<CommentResponse>(comment);
         return commentReponse;
+    }
+
+    //Todo: Implement Returning this for all the services
+    public void Delete(int issueId, int commentId)
+    {
+        var comment = _repositoryManager.Comment.FindByCondition(c => c.Id == commentId && c.Issue.Id == issueId);
+        if (comment is null)
+        {
+            throw new IssueNotFoundException(commentId);
+        }
+        _repositoryManager.Comment.Delete(comment);
     }
 
     public IEnumerable<CommentResponse> Get(int issueId)

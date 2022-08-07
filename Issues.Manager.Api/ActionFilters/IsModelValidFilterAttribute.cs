@@ -18,7 +18,7 @@ public class IsModelValidFilterAttribute : IActionFilter
         var controller = context.RouteData.Values["controller"];
 
         var param = context.ActionArguments
-            .SingleOrDefault(x => x.Value.ToString().Contains("Dto")).Value;
+            .SingleOrDefault(x => x.Value.ToString().Contains("Request")).Value;
         if (param is null)
         {
             _loggerManager.LogError($"Object sent from client is null. Controller: {controller}, action: {action}");
