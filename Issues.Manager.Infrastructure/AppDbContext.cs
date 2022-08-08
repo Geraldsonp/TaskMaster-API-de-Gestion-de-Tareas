@@ -1,9 +1,8 @@
 ﻿using System.Security.Claims;
-using System.Security.Principal;
-using Issues.Manager.Application.Services.HttpContextAccessor;
 using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Issues.Manager.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -11,13 +10,16 @@ namespace Issues.Manager.Infrastructure;
 
 public class AppDbContext : IdentityDbContext<IdentityUser>
 {
-    private readonly IHttpAccessor _httpAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpAccessor httpAccessor) : base(options)
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
     {
-        _httpAccessor = httpAccessor;
+        _httpContextAccessor = httpContextAccessor;
     }
     
+    public DbSet<Issue> Issues { get; set; }
+    public DbSet<User> AppUsers { get; set; }
   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,12 +30,25 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             .HasForeignKey<User>(u => u.IdentityId);
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.Entity<Issue>()
-                .HasQueryFilter(i => i.UserId == _httpAccessor.GetCurrentIdentityId() );
+                .HasQueryFilter(i => i.UserId == GetUserId() );
+    }
+
+    private int GetUserId()
+    {
+        if (_httpContextAccessor.HttpContext != null)
+        {
+            var user = _httpContextAccessor.HttpContext.User;
+            var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            return AppUsers.FirstOrDefault(u => u.IdentityId == userIdClaim).Id;
+        }
+        else
+        {
+            return 0;
+        }
     }
     
     
     
-    public DbSet<Issue> Issues { get; set; }
-    public DbSet<User> AppUsers { get; set; }
+    
     
 }

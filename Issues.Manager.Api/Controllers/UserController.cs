@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services.Identity;
 using Issues.Manager.Application.Services.Logger;
+using Issues.Manager.Application.Services.Token;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +16,16 @@ namespace Issues.Manager.Api.Controllers
     {
         private readonly IIdentityManager _identityManager;
         private readonly ILoggerManager _loggerManager;
+        private readonly ITokenManager _tokenManager;
 
         public UserController(IIdentityManager identityManager,
-            ILoggerManager loggerManager)
+            ILoggerManager loggerManager,
+            ITokenManager tokenManager)
         {
             _identityManager = identityManager;
             _loggerManager = loggerManager;
+            _tokenManager = tokenManager;
+
         }
         
         
@@ -47,13 +53,20 @@ namespace Issues.Manager.Api.Controllers
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public async Task<IActionResult> Login([FromBody] UserLogInRequest userLogInRequest)
         {
-            if (!await _identityManager.ValidateUser(userLogInRequest))
+            var Result = await _identityManager.ValidateUser(userLogInRequest);
+            if (!Result.Item1)
             {
                 _loggerManager.LogWarn($"{nameof(Login)}: Authentication Failed. Wrong Username or password");
                 return Unauthorized();
             }
+            var claims = new List<Claim>
+            {
+               
+                new Claim(ClaimTypes.Name, Result.Item2.UserName),
+                new Claim(ClaimTypes.NameIdentifier, Result.Item2.Id)
+            };
 
-            return Ok(new { Token = await _identityManager.CreateToken() });
+            return Ok(new { Token = await _tokenManager.GenerateToken(claims) });
 
         }
     

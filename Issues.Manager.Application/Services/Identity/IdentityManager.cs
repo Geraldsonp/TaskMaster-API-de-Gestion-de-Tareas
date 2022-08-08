@@ -57,48 +57,15 @@ public class IdentityManager : IIdentityManager
         return result;
     }
 
-    public async Task<bool> ValidateUser(UserLogInRequest userForAuth)
+    public async Task<Tuple<bool, IdentityUser>> ValidateUser(UserLogInRequest userForAuth)
     {
         _user = await _userManager.FindByNameAsync(userForAuth.UserName);
-        return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
+        var isValid = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
+        
+        return new Tuple<bool, IdentityUser>(isValid, _user) ;
     }
+    
+    
+    
 
-    public async Task<string> CreateToken()
-    {
-        var signinCredentials = GetSingIngCredentials();
-        var claims = GetClaims();
-        var tokenOptions = GenerateTokenOptions(signinCredentials, claims);
-        return  new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-    }
-
-    private List<Claim> GetClaims()
-    {
-        var user = _repositoryManager.User.FindByCondition(u => u.IdentityId == _user.Id);
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.UserData, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, _user.UserName),
-            new Claim(ClaimTypes.NameIdentifier, _user.Id)
-        };
-        return claims;
-    }
-
-    private JwtSecurityToken GenerateTokenOptions(SigningCredentials signinCredentials, List<Claim> claims)
-    {
-        var tokenOptions = new JwtSecurityToken
-        (
-            claims: claims,
-            expires:
-            DateTime.Now.AddMinutes(50),
-            signingCredentials: signinCredentials
-        );
-        return tokenOptions;
-    }
-
-    private SigningCredentials GetSingIngCredentials()
-    {
-        var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSecretKey").Value);
-        var secret = new SymmetricSecurityKey(key);
-        return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
-    }
 }

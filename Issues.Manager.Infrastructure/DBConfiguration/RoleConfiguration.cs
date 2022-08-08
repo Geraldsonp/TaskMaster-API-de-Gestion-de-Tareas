@@ -11,13 +11,24 @@ public class RoleConfiguration: IEntityTypeConfiguration<IdentityRole>
         builder.HasData(
             new IdentityRole
             {
-                Name = "Manager",
-                NormalizedName = "MANAGER"
+                Name = "Project Manager",
+                NormalizedName = "PROJECT MANAGER"
+            },
+            new IdentityRole
+            {
+                Name = "Developer",
+                NormalizedName = "DEVELOPER"
+            },
+            new IdentityRole
+            {
+                Name = "Quality Assurance",
+                NormalizedName = "Quality Assurance"
             },
             new IdentityRole
             {
                 Name = "Administrator",
                 NormalizedName = "ADMINISTRATOR"
             });
+        
     }
 }
