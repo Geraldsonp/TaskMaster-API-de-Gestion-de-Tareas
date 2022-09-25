@@ -14,27 +14,31 @@ namespace Issues.Manager.Api.Controllers
         private readonly IIssueService _issueService;
         private readonly ILoggerManager _loggerManager;
         private string _userId;
+
         public IssueController(IIssueService issueService, ILoggerManager loggerManager)
         {
             _issueService = issueService;
             _loggerManager = loggerManager;
-           
         }
+
         // GET: api/Issue
         [HttpGet]
-        public ActionResult<IEnumerable<IssueReponse>>  Get()
-        {  _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _loggerManager.LogDebug("Getting All The Issues");
+        [ProducesResponseType(200)]
+        public ActionResult<IEnumerable<IssueReponse>> Get()
+        {
+            _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             return Ok(_issueService.GetAll());
         }
 
         // GET: api/Issue/5
         [HttpGet("{id}", Name = "GetById")]
+        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(404)]
         public ActionResult<IssueReponse> Get(int id)
         {
-            
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _loggerManager.LogDebug($"Trying to get issue ID:{id}");
+
             var issueDto = _issueService.GetById(id);
             return Ok(issueDto);
         }
@@ -42,18 +46,18 @@ namespace Issues.Manager.Api.Controllers
         // POST: api/Issue
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<IssueReponse>  Post([FromBody] CreateIssueRequest createdIssueRequest)
+        public ActionResult<IssueReponse> Post([FromBody] CreateIssueRequest createdIssueRequest)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result =  _issueService.Create(createdIssueRequest, _userId);
+            var result = _issueService.Create(createdIssueRequest, _userId);
             _loggerManager.LogInfo("Creating Issue");
-            return CreatedAtRoute("GetById", new {id = result.Id}, result);
+            return CreatedAtRoute("GetById", new { id = result.Id }, result);
         }
 
         // PUT: api/Issue/5
         [HttpPut("{id}")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<IssueReponse>  Put(int id, [FromBody] IssueReponse issueReponseToUpdate)
+        public ActionResult<IssueReponse> Put(int id, [FromBody] IssueReponse issueReponseToUpdate)
         {
             _loggerManager.LogInfo($"Attempting to Update issue id: {id}");
             var result = _issueService.Update(issueReponseToUpdate);
