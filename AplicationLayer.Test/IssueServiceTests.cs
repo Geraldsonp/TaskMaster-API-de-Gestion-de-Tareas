@@ -1,13 +1,14 @@
 using System;
 using AutoMapper;
-using Issues.Manager.Application.Abstractions.RepositoryContracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.MappingConfigs;
 using Issues.Manager.Application.Services;
 using Issues.Manager.Application.Services.Logger;
+using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Enums;
 using Issues.Manager.Domain.Exceptions;
+using Issues.Manager.Infrastructure.Repositories;
 using Moq;
 using Xunit;
 
@@ -18,7 +19,7 @@ public class IssueServiceTests
     private IIssueService _systemUnderTest;
     private readonly Mock<IRepositoryManager> _unitOfWork = new Mock<IRepositoryManager>();
     private readonly Mock<ILoggerManager> _loggerMock = new Mock<ILoggerManager>();
-    private readonly Mock<IIssueRepository> _issueRepositoryMock = new Mock<IIssueRepository>();
+    private readonly Mock<IRepositoryBase<Issue>> _issueRepositoryMock = new Mock<IRepositoryBase<Issue>>();
     private IMapper _mapper;
     private readonly Issue _issue;
 
@@ -46,7 +47,7 @@ public class IssueServiceTests
             i.FindByCondition(x => x.Id == 1
                 , false)).Returns(_issue).Verifiable();
 
-        _unitOfWork.Setup(m => m.Issue)
+        _unitOfWork.Setup(m => m.IssuesRepository)
             .Returns(_issueRepositoryMock.Object);
 
         _systemUnderTest = new IssueService(_unitOfWork.Object, _mapper);
@@ -63,57 +64,14 @@ public class IssueServiceTests
     [Fact]
     public void GetIssueById_ShouldReturnIssueNotFoundException_WhenInvalidValidId()
     {
-        //Arrange
-
-        var issueRepositoryMock = new Mock<IIssueRepository>();
-        issueRepositoryMock.Setup(i => 
-            i.FindByCondition(x => x.Id == 1
-                , false)).Returns(_issue).Verifiable();
-
-        _unitOfWork.Setup(m => m.Issue)
-            .Returns(issueRepositoryMock.Object);
-
-        _systemUnderTest = new IssueService(_unitOfWork.Object, _mapper);
         
-        //Act
-
-        //Assert
-        Assert.Throws<IssueNotFoundException>( () => _systemUnderTest.GetById(5, false));
 
     }
 
     [Fact]
     public void CreateIssue_ShouldReturnIssueDto_WhenValidIssue()
     {
-        var issue = new CreateIssueRequest()
-        {
-            Description = "test",
-            IssueType = IssueType.Bug,
-            Priority = Priority.High,
-            Title = "Bobo"
-        };
-        var userid = 1;
         
-        //Arrange
-        var userId = "qweqweqweqwe";
-        _unitOfWork.Setup(u =>
-            u.User.FindByCondition(u => u.IdentityId == userId, false)).Returns(new User(){Id = userid}).Verifiable();
-
-        _unitOfWork.Setup(u => u.Issue.Create(new Issue()));
-        _unitOfWork.Setup(u => u.SaveChanges());
-
-        var result2 = _unitOfWork.Object.User.FindByCondition(u => u.IdentityId == userId, false);
-
-        _systemUnderTest = new IssueService(_unitOfWork.Object, _mapper);
-        
-        //Act
-
-        var result = _systemUnderTest.Create(issue, userId);
-
-        //Assert
-        Assert.IsType<IssueReponse>(result);
-        Assert.Equal(1, result.UserId);
-        _unitOfWork.Verify(u => u.SaveChanges(), Times.Once);
 
     }
 } 

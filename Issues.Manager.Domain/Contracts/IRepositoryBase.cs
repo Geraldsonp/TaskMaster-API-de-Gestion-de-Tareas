@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Issues.Manager.Domain.Entities;
 
-namespace Issues.Manager.Application.Abstractions.RepositoryContracts;
+namespace Issues.Manager.Domain.Contracts;
 
 public interface IRepositoryBase<T> where T : BaseEntity
 {

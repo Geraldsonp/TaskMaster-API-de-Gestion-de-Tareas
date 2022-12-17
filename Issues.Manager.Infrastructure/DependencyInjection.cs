@@ -1,7 +1,5 @@
-﻿using Issues.Manager.Application.Abstractions.RepositoryContracts;
-using Issues.Manager.Infrastructure;
+﻿using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Infrastructure.Repositories;
-using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

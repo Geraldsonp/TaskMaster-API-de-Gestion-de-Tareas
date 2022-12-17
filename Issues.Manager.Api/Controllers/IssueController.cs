@@ -12,13 +12,11 @@ namespace Issues.Manager.Api.Controllers
     public class IssueController : ControllerBase
     {
         private readonly IIssueService _issueService;
-        private readonly ILoggerManager _loggerManager;
         private string _userId;
 
-        public IssueController(IIssueService issueService, ILoggerManager loggerManager)
+        public IssueController(IIssueService issueService)
         {
             _issueService = issueService;
-            _loggerManager = loggerManager;
         }
 
         // GET: api/Issue
@@ -44,28 +42,33 @@ namespace Issues.Manager.Api.Controllers
         }
 
         // POST: api/Issue
+        [ProducesResponseType(200, Type = typeof(IssueReponse))]
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public ActionResult<IssueReponse> Post([FromBody] CreateIssueRequest createdIssueRequest)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _issueService.Create(createdIssueRequest, _userId);
-            _loggerManager.LogInfo("Creating Issue");
             return CreatedAtRoute("GetById", new { id = result.Id }, result);
         }
 
         // PUT: api/Issue/5
         [HttpPut("{id}")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
+        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(404)]
         public ActionResult<IssueReponse> Put(int id, [FromBody] IssueReponse issueReponseToUpdate)
         {
-            _loggerManager.LogInfo($"Attempting to Update issue id: {id}");
+            
             var result = _issueService.Update(issueReponseToUpdate);
+            
             return Ok(result);
         }
 
         // DELETE: api/Issue/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(404)]
         public ActionResult Delete(int id)
         {
             _issueService.Delete(id);

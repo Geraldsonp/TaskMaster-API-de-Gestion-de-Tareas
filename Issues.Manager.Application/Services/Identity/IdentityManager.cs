@@ -1,14 +1,10 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
-using Issues.Manager.Application.Abstractions.RepositoryContracts;
+﻿using AutoMapper;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services.Logger;
+using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Issues.Manager.Application.Services.Identity;
 
@@ -52,7 +48,7 @@ public class IdentityManager : IIdentityManager
             IdentityId = user.Id,
             FullName = String.Concat($"{userRegisterRequest.FirstName} {userRegisterRequest.LastName}")
         };
-        _repositoryManager.User.Create(appuser);
+        _repositoryManager.UsersRepository.Create(appuser);
         _loggerManager.LogInfo($"Creating user for Identity:");
         return result;
     }

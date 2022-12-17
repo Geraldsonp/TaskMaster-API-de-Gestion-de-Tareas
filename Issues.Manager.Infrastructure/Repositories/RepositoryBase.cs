@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
-using Issues.Manager.Application.Abstractions.RepositoryContracts;
+using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Issues.Manager.Infrastructure.Repositories;
 
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
+public class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
 {
     private AppDbContext _dbContext;
 

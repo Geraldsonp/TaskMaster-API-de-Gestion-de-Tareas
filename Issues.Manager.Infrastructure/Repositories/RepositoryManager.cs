@@ -1,26 +1,27 @@
-﻿using Issues.Manager.Application.Abstractions.RepositoryContracts;
+﻿using Issues.Manager.Domain.Contracts;
+using Issues.Manager.Domain.Entities;
 
 namespace Issues.Manager.Infrastructure.Repositories;
 
 public class RepositoryManager : IRepositoryManager
 {
     private readonly AppDbContext _dbContext;
-    private IIssueRepository? _issueRepository;
-    private IUserRepository? _userRepository;
-    private ICommentsRepository _commentsRepository;
+    private IRepositoryBase<Issue>? _issueRepository;
+    private IRepositoryBase<User>? _userRepository;
+    private IRepositoryBase<Comment>? _commentsRepository;
 
     public RepositoryManager(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public ICommentsRepository Comment
+    public IRepositoryBase<Comment>?  CommentsRepository
     {
         get
         {
             if (_commentsRepository == null)
             {
-                _commentsRepository = new CommentRepository(_dbContext);
+                _commentsRepository = new RepositoryBase<Comment>(_dbContext);
             }
 
             return _commentsRepository;
@@ -28,13 +29,13 @@ public class RepositoryManager : IRepositoryManager
         
     }
 
-    public IIssueRepository Issue
+    public IRepositoryBase<Issue>?  IssuesRepository
     {
         get
         {
             if (_issueRepository == null)
             {
-                _issueRepository = new IssueRepository(_dbContext);
+                _issueRepository = new RepositoryBase<Issue>(_dbContext);
             }
 
 
@@ -42,13 +43,13 @@ public class RepositoryManager : IRepositoryManager
         }
     }
 
-    public IUserRepository User
+    public IRepositoryBase<User>?  UsersRepository
     {
         get
         {
             if (_userRepository == null)
             {
-                _userRepository = new UserRepository(_dbContext);
+                _userRepository = new RepositoryBase<User>(_dbContext);
             }
 
             return _userRepository;
