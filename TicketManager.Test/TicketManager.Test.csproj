@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Issues.Manager.Api\Issues.Manager.Api.csproj" />
+      <ProjectReference Include="..\Ticket.Manager.Api\Ticket.Manager.Api.csproj" />
     </ItemGroup>
 
 </Project>
