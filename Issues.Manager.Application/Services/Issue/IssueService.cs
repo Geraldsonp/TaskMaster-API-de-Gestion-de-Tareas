@@ -11,21 +11,24 @@ public class IssueService : IIssueService
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
 
+    private readonly IUserIdProvider UserIdProvider;
 
     public IssueService(
         IRepositoryManager repositoryManager,
-        IMapper mapper)
+        IMapper mapper, IUserIdProvider userIdProvider)
     {
+        this.UserIdProvider = userIdProvider;
         this._repositoryManager = repositoryManager;
         _mapper = mapper;
     }
 
-    public IssueReponse Create(CreateIssueRequest createIssueRequest, string identityId)
+    public IssueReponse Create(CreateIssueRequest createIssueRequest)
     {
+        var identityID = UserIdProvider.GetCurrentUserId();
         var userId = _repositoryManager.UsersRepository
-            .FindByCondition(u => 
-                    u.IdentityId == identityId).Id;
-        
+            .FindByCondition(u =>
+                    u.IdentityId == identityID).Id;
+
         var issueToSave = _mapper.Map<Issue>(createIssueRequest);
         issueToSave.UserId = userId;
         _repositoryManager.IssuesRepository.Create(issueToSave);
@@ -42,9 +45,9 @@ public class IssueService : IIssueService
         }
         return _mapper.Map<IssueReponse>(issue);
     }
-    
 
-    public IEnumerable<IssueReponse> GetAll( bool trackChanges = false)
+
+    public IEnumerable<IssueReponse> GetAll(bool trackChanges = false)
     {
         var issues = _repositoryManager.IssuesRepository.FindAll(trackChanges).ToList();
         var issuesDtos = _mapper.Map<IEnumerable<IssueReponse>>(issues);
@@ -53,8 +56,8 @@ public class IssueService : IIssueService
 
     public IssueReponse Update(IssueReponse issueReponse)
     {
-        var mappedIssue = _mapper.Map<Issue>(issueReponse);
-        _repositoryManager.IssuesRepository.Update(mappedIssue);
+        var updatedIssue = _mapper.Map<Issue>(issueReponse);
+        _repositoryManager.IssuesRepository.Update(updatedIssue);
         _repositoryManager.SaveChanges();
         return issueReponse;
     }
@@ -63,10 +66,12 @@ public class IssueService : IIssueService
     {
         var issueToDelete = _repositoryManager.IssuesRepository
             .FindByCondition(i => i.Id == id);
+
         if (issueToDelete is null)
         {
             throw new IssueNotFoundException(id);
         }
+        
         _repositoryManager.IssuesRepository.Delete(issueToDelete);
         _repositoryManager.SaveChanges();
     }

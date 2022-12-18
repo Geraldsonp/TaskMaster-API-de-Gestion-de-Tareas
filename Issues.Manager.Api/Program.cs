@@ -1,8 +1,10 @@
 using System.Text.Json.Serialization;
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Api.CustomMiddleware;
+using Issues.Manager.Api.Helpers;
 using Issues.Manager.Api.ServiceConfiguration;
 using Issues.Manager.Application;
+using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -23,6 +25,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddControllers().AddJsonOptions(

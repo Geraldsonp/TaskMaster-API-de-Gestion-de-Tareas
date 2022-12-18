@@ -24,8 +24,6 @@ namespace Issues.Manager.Api.Controllers
         [ProducesResponseType(200)]
         public ActionResult<IEnumerable<IssueReponse>> Get()
         {
-            _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             return Ok(_issueService.GetAll());
         }
 
@@ -35,7 +33,6 @@ namespace Issues.Manager.Api.Controllers
         [ProducesResponseType(404)]
         public ActionResult<IssueReponse> Get(int id)
         {
-            _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var issueDto = _issueService.GetById(id);
             return Ok(issueDto);
@@ -48,7 +45,7 @@ namespace Issues.Manager.Api.Controllers
         public ActionResult<IssueReponse> Post([FromBody] CreateIssueRequest createdIssueRequest)
         {
             _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _issueService.Create(createdIssueRequest, _userId);
+            var result = _issueService.Create(createdIssueRequest);
             return CreatedAtRoute("GetById", new { id = result.Id }, result);
         }
 
