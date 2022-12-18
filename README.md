@@ -12,7 +12,14 @@ Para la autenticacion y seguridad utilize JWTTokens porque debido a su funcionam
 
 al contruir este projecto pude ampliar mis conocimientos en cuanto a la organizacion del projecto, diferentes tipos de relaciones en la base de datos, el mappeo automatico de objetos Resfull API y la injeccion de dependencias. 
 
-## How to Install and Run the Project
+## Tecnologias Usadas
+- C#
+- .Net
+- SQLLite
+- AutoMapper
+- EF Core
+
+## Como instalar y correr el projecto
 
 Para correr el projecto simplemente clona el repo y connecta la base de datos para eso tendras que cambiar la cadena de conneccion en el appsettings.json.
 
@@ -20,7 +27,5 @@ Ya luego solo ejecutas el projecto con dotnet run.
 
 Todo esto luego de tener instalado .NET SDK 6.1
 
-
-
-
-
+# Upcoming
+- Estare Añadiendo UnitTesting

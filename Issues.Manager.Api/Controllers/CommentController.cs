@@ -42,7 +42,6 @@ namespace Issues.Manager.Api.Controllers
         [HttpDelete("{commentId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        //Todo: Verify if is best to do this from body
         public IActionResult Delete([FromRoute] int commentId, int issueId)
         {
             _commentService.Delete(issueId, commentId);

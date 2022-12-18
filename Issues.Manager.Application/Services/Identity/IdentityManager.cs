@@ -34,22 +34,24 @@ public class IdentityManager : IIdentityManager
     public async Task<IdentityResult> Create(UserRegisterRequest userRegisterRequest)
     {
         var user = _mapper.Map<IdentityUser>(userRegisterRequest);
-        _loggerManager.LogInfo($"Creating IdentityUser for: {userRegisterRequest.Email}");
+
         var result = await _userManager.CreateAsync(user, userRegisterRequest.Password);
+
         if (!result.Succeeded)
         {
             _loggerManager.LogError($"Unable to create IdentityUser");
             return result;
         }
 
-        _loggerManager.LogInfo($"Identity User Created Successfully");
         User appuser = new()
         {
             IdentityId = user.Id,
             FullName = String.Concat($"{userRegisterRequest.FirstName} {userRegisterRequest.LastName}")
         };
+
         _repositoryManager.UsersRepository.Create(appuser);
-        _loggerManager.LogInfo($"Creating user for Identity:");
+
+        _repositoryManager.SaveChanges();
         return result;
     }
 
