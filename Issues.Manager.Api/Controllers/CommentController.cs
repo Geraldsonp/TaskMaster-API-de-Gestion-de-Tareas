@@ -39,6 +39,22 @@ namespace Issues.Manager.Api.Controllers
             return Ok(commentResponse);
         }
 
+        [HttpPut]
+        [ProducesResponseType(200, Type = typeof(CommentResponse))]
+        [ProducesResponseType(422)]
+        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
+        public IActionResult Update(CreateCommentRequest comment, [FromRoute] int commentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(comment);
+            }
+
+            var commentResponse = _commentService.Update(comment, commentId);
+
+            return Ok(commentResponse);
+        }
+
         [HttpDelete("{commentId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

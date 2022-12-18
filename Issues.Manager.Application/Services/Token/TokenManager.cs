@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,9 +15,15 @@ public class TokenManager : ITokenManager
     {
         _configurationManager = configurationManager;
     }
-    
-    public Task<string> GenerateToken( List<Claim> claims)
+
+    public Task<string> GenerateToken(IdentityUser? user)
     {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
+        };
+
         var signinCredentials = GetSingIngCredentials();
         var token = new JwtSecurityToken
         (
@@ -27,9 +34,8 @@ public class TokenManager : ITokenManager
         );
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
         return Task.FromResult(tokenString);
-
     }
-    
+
     private SigningCredentials GetSingIngCredentials()
     {
         var key = Encoding.UTF8.GetBytes(_configurationManager.GetSection("JwtSecretKey").Value);

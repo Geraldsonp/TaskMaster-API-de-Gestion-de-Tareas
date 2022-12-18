@@ -15,8 +15,7 @@ public static class DependencyInjection
         var connection = config.GetConnectionString("DefaultSQLite");
         services.AddDbContext<AppDbContext>(o => o.UseSqlite(connection,
             builder => builder.MigrationsAssembly("Issues.Manager.Infrastructure")));
-        /*services.AddScoped<IRepositoryBase<Issue>, IssueRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();*/
+
         services.AddIdentityCore<IdentityUser>(
             o =>
             {

@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services.Logger;
+using Issues.Manager.Application.Services.Token;
 using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +14,7 @@ public class IdentityManager : IIdentityManager
 {
     private readonly ILoggerManager _loggerManager;
     private readonly IMapper _mapper;
+    private readonly ITokenManager _tokenManager;
     private readonly IRepositoryManager _repositoryManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
@@ -20,18 +23,20 @@ public class IdentityManager : IIdentityManager
     public IdentityManager(
         ILoggerManager loggerManager,
         IMapper mapper,
+        ITokenManager tokenManager,
         IRepositoryManager repositoryManager,
         UserManager<IdentityUser> userManager,
         IConfiguration configuration)
     {
         _loggerManager = loggerManager;
         _mapper = mapper;
+        _tokenManager = tokenManager;
         _repositoryManager = repositoryManager;
         _userManager = userManager;
         _configuration = configuration;
     }
 
-    public async Task<IdentityResult> Create(UserRegisterRequest userRegisterRequest)
+    public async Task<AuthenticationResult> Create(UserRegisterRequest userRegisterRequest)
     {
         var user = _mapper.Map<IdentityUser>(userRegisterRequest);
 
@@ -39,8 +44,7 @@ public class IdentityManager : IIdentityManager
 
         if (!result.Succeeded)
         {
-            _loggerManager.LogError($"Unable to create IdentityUser");
-            return result;
+            return new AuthenticationResult(result.Errors);
         }
 
         User appuser = new()
@@ -50,20 +54,26 @@ public class IdentityManager : IIdentityManager
         };
 
         _repositoryManager.UsersRepository.Create(appuser);
-
         _repositoryManager.SaveChanges();
-        return result;
+
+        var token = await _tokenManager.GenerateToken(user);
+
+        return new AuthenticationResult(token);
     }
 
-    public async Task<Tuple<bool, IdentityUser>> ValidateUser(UserLogInRequest userForAuth)
+    public async Task<Tuple<bool, string>> LogIn(UserLogInRequest userForAuth)
     {
         _user = await _userManager.FindByNameAsync(userForAuth.UserName);
-        var isValid = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
-        
-        return new Tuple<bool, IdentityUser>(isValid, _user) ;
-    }
-    
-    
-    
 
+        var isSuccess = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
+
+        if (!isSuccess)
+        {
+            return new Tuple<bool, string>(isSuccess, "Username or Password Error") ;
+        }
+
+        var token = await _tokenManager.GenerateToken(_user);
+
+        return new Tuple<bool, string>(isSuccess, token) ;
+    }
 }

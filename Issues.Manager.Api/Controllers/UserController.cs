@@ -32,42 +32,34 @@ namespace Issues.Manager.Api.Controllers
         // POST: User/Register
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest
-            userForRegistration)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest userForRegistration)
         {
             var result = await _identityManager.Create(userForRegistration);
-            if (!result.Succeeded)
+
+            if (!result.IsSuccess)
             {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
-
                 return BadRequest(ModelState);
             }
 
-            return StatusCode(201);
+            return Ok(result.Token);
         }
 
         [HttpPost("Login")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         public async Task<IActionResult> Login([FromBody] UserLogInRequest userLogInRequest)
         {
-            var Result = await _identityManager.ValidateUser(userLogInRequest);
-            if (!Result.Item1)
+            var result = await _identityManager.LogIn(userLogInRequest);
+
+            if (!result.Item1)
             {
-                _loggerManager.LogWarn($"{nameof(Login)}: Authentication Failed. Wrong Username or password");
-                return Unauthorized();
+                return Unauthorized(result.Item2);
             }
-            var claims = new List<Claim>
-            {
-               
-                new Claim(ClaimTypes.Name, Result.Item2.UserName),
-                new Claim(ClaimTypes.NameIdentifier, Result.Item2.Id)
-            };
 
-            return Ok(new { Token = await _tokenManager.GenerateToken(claims) });
-
+            return Ok(result.Item2);
         }
     
     

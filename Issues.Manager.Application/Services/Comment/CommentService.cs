@@ -50,6 +50,24 @@ public class CommentService : ICommentService
         _repositoryManager.CommentsRepository.Delete(comment);
     }
 
+    public CommentResponse Update(CreateCommentRequest updatedComment, int commentId)
+    {
+        var comment = _repositoryManager.CommentsRepository.FindByCondition(comment => comment.Id == commentId, true);
+
+        if (comment is null)
+        {
+            throw new IssueNotFoundException(commentId);
+        }
+
+        comment.Content = updatedComment.Content;
+
+        _repositoryManager.SaveChanges();
+
+        var commentReponse = _mapper.Map<CommentResponse>(comment);
+
+        return commentReponse;
+    }
+
     public IEnumerable<CommentResponse> Get(int issueId)
     {
         var issue = _repositoryManager.IssuesRepository.FindByCondition(i => i.Id == issueId);
@@ -58,8 +76,10 @@ public class CommentService : ICommentService
         {
             throw new IssueNotFoundException(issueId);
         }
+
         var comments = _repositoryManager.CommentsRepository
             .FindRangeByCondition(c => c.Issue.Id == issueId).ToList();
+
         return _mapper.Map<IEnumerable<CommentResponse>>(comments); 
     }
 }

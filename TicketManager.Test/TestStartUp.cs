@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using Issues.Manager.Application.DTOs;
 using Issues.Manager.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Hosting;
@@ -40,4 +44,6 @@ public class TestStartUp<T> : WebApplicationFactory<Program> where T : Program
             }
         });
     }
+
+
 }

@@ -7,7 +7,7 @@ namespace Issues.Manager.Application.Services;
 public interface ICommentService
 {
     IEnumerable<CommentResponse> Get(int issueId);
-
     CommentResponse Create(CreateCommentRequest commentRequest, int issueId);
-    void Delete(int issueId, int commentId);
+    void Delete(int commentId, int issueId);
+    CommentResponse Update(CreateCommentRequest comment, int issueId);
 }
