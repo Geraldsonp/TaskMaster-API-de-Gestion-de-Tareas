@@ -10,6 +10,8 @@ public class AuthenticationResult
 
     public string Token { get; set; }
 
+    public string Error { get; set; }
+
     public AuthenticationResult(string token)
     {
         Token = token;
@@ -19,5 +21,11 @@ public class AuthenticationResult
     {
         Errors = errors;
         IsSuccess = false;
+    }
+
+    public AuthenticationResult(bool isSuccess, string errorMessage)
+    {
+        IsSuccess = isSuccess;
+        Error = errorMessage;
     }
 }

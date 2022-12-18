@@ -61,7 +61,7 @@ public class IdentityManager : IIdentityManager
         return new AuthenticationResult(token);
     }
 
-    public async Task<Tuple<bool, string>> LogIn(UserLogInRequest userForAuth)
+    public async Task<AuthenticationResult> LogIn(UserLogInRequest userForAuth)
     {
         _user = await _userManager.FindByNameAsync(userForAuth.UserName);
 
@@ -69,11 +69,11 @@ public class IdentityManager : IIdentityManager
 
         if (!isSuccess)
         {
-            return new Tuple<bool, string>(isSuccess, "Username or Password Error") ;
+            return new AuthenticationResult(isSuccess, "UserName Or Password Error") ;
         }
 
         var token = await _tokenManager.GenerateToken(_user);
 
-        return new Tuple<bool, string>(isSuccess, token) ;
+        return new AuthenticationResult(token);
     }
 }

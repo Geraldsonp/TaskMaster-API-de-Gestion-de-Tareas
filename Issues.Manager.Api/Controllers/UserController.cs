@@ -54,12 +54,12 @@ namespace Issues.Manager.Api.Controllers
         {
             var result = await _identityManager.LogIn(userLogInRequest);
 
-            if (!result.Item1)
+            if (!result.IsSuccess)
             {
-                return Unauthorized(result.Item2);
+                return Unauthorized(result.Error);
             }
 
-            return Ok(result.Item2);
+            return Ok(result.Token);
         }
     
     
