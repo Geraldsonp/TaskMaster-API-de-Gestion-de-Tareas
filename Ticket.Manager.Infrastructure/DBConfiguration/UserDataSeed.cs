@@ -8,7 +8,7 @@ namespace Issues.Manager.Infrastructure.DBConfiguration;
 public static class UserDataSeed
 {
 
-    public static void Configure(this ModelBuilder builder)
+    public static void SeedDb(this ModelBuilder builder)
     {
         string id1 = new Guid().ToString();
         string id2 = new Guid().ToString();

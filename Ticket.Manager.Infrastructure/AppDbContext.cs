@@ -31,6 +31,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<IdentityUser>().HasOne<User>().WithOne(u => u.IdentityUser)
             .HasForeignKey<User>(u => u.IdentityId);
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.SeedDb();
         modelBuilder.Entity<Ticket>()
                 .HasQueryFilter(i => i.UserId == GetUserId() );
     }
