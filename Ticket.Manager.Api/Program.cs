@@ -5,6 +5,7 @@ using Issues.Manager.Api.ServiceConfiguration;
 using Issues.Manager.Application;
 using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Infrastructure;
+using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -32,9 +33,9 @@ builder.Services.AddControllers().AddJsonOptions(
     });
 ;
 
-
 var app = builder.Build();
-
+var scope = app.Services.CreateScope();
+await MigrationHelper.RunMigrationsAsync(scope.ServiceProvider);
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
