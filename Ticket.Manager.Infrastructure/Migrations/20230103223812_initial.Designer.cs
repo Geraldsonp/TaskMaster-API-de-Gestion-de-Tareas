@@ -3,6 +3,7 @@ using System;
 using Issues.Manager.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Issues.Manager.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230103223812_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,29 +144,29 @@ namespace Issues.Manager.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ba485996-f503-44f0-a6ce-b7650dc11f5d",
-                            ConcurrencyStamp = "bf7456a8-440d-46e8-ac25-6207679265d1",
+                            Id = "5c0c0dc4-293f-48c6-aeae-1501070968af",
+                            ConcurrencyStamp = "45bd2626-6fd6-4278-9a71-10f0042a166a",
                             Name = "Project Manager",
                             NormalizedName = "PROJECT MANAGER"
                         },
                         new
                         {
-                            Id = "e504828b-3a0b-4e04-b098-57e0a47193eb",
-                            ConcurrencyStamp = "1ebf1dfd-6aaf-42e5-82fc-bbae509e0446",
+                            Id = "d42b77d1-a210-4e9f-af98-25ad0b10b821",
+                            ConcurrencyStamp = "f7bfafe7-bc9a-4e4f-9a25-f85d7188e668",
                             Name = "Developer",
                             NormalizedName = "DEVELOPER"
                         },
                         new
                         {
-                            Id = "ed14ec3c-2f6d-4520-aea6-12d6513e29ec",
-                            ConcurrencyStamp = "0f223817-c16c-4b27-a549-54721d4ca496",
+                            Id = "d0a755e8-3e30-4f14-afe4-a9e3ac739139",
+                            ConcurrencyStamp = "15811e4d-b6f0-412d-ba6e-a6ded08b96fe",
                             Name = "Quality Assurance",
                             NormalizedName = "Quality Assurance"
                         },
                         new
                         {
-                            Id = "3bfff56e-e2c0-46db-9502-67c347193ad7",
-                            ConcurrencyStamp = "8fff6800-6c6f-4d7f-b680-2d1d1c151420",
+                            Id = "347c4128-03ef-4fcc-a851-763787998fd0",
+                            ConcurrencyStamp = "a6d6391a-efec-4d87-918b-3fefe44332cb",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

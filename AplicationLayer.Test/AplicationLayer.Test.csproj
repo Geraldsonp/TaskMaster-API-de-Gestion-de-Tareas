@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Issues.Manager.Infrastructure\Issues.Manager.Infrastructure.csproj" />
+      <ProjectReference Include="..\Ticket.Manager.Infrastructure\Ticket.Manager.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

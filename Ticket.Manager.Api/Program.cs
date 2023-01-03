@@ -17,10 +17,7 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureFilters();
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureJwt(builder.Configuration);
@@ -32,17 +29,16 @@ builder.Services.AddControllers().AddJsonOptions(
     {
         var enumConverter = new JsonStringEnumConverter();
         opts.JsonSerializerOptions.Converters.Add(enumConverter);
-    });;
+    });
+;
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -56,4 +52,6 @@ app.MapControllers()
 
 app.Run();
 
-public partial class Program{}
+public partial class Program
+{
+}

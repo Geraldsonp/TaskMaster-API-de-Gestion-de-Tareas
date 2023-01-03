@@ -1,4 +1,5 @@
 ﻿using Issues.Manager.Domain.Contracts;
+using Issues.Manager.Infrastructure.DBConfiguration;
 using Issues.Manager.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,9 @@ public static class DependencyInjection
     public static IServiceCollection AddDataAccess(this IServiceCollection services,
         IConfiguration config)
     {
-        var connection = config.GetConnectionString("DefaultSQLite");
-        services.AddDbContext<AppDbContext>(o => o.UseSqlite(connection,
-            builder => builder.MigrationsAssembly("Ticket.Manager.Infrastructure")));
+
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(DatabaseConnectionProvider.GetConnectionString(config)));
 
         services.AddIdentityCore<IdentityUser>(
             o =>
@@ -26,7 +27,9 @@ public static class DependencyInjection
                 o.Password.RequiredLength = 6;
                 o.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<AppDbContext>();
+
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+
         return services;
     }
 }
