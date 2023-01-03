@@ -10,16 +10,9 @@ public static class UserDataSeed
 
     public static void SeedDb(this ModelBuilder builder)
     {
-        string id1 = new Guid().ToString();
         string id2 = new Guid().ToString();
         builder.Entity<IdentityUser>().HasData(new[]
         {
-            new IdentityUser()
-            {
-                UserName = "Gperez18",
-                Email = "GPerez18@gmail.com",
-                Id = id1
-            },
             new IdentityUser()
             {
                 UserName = "JohnDoe",
@@ -29,12 +22,6 @@ public static class UserDataSeed
         });
         builder.Entity<User>().HasData(new[]
         {
-            new User()
-            {
-                FullName = "Geraldson Perez",
-                Id = 1,
-                IdentityId = id1,
-            },
             new User()
             {
                 FullName = "John Doe",
