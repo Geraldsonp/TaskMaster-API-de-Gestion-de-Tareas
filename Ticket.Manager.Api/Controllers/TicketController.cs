@@ -1,8 +1,6 @@
-using System.Security.Claims;
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services;
-using Issues.Manager.Application.Services.Logger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers

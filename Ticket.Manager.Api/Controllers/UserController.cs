@@ -1,8 +1,6 @@
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services.Identity;
-using Issues.Manager.Application.Services.Logger;
-using Issues.Manager.Application.Services.Token;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

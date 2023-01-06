@@ -1,7 +1,5 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Services.Logger;
 using Issues.Manager.Application.Services.Token;
 using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
@@ -12,7 +10,6 @@ namespace Issues.Manager.Application.Services.Identity;
 
 public class IdentityManager : IIdentityManager
 {
-    private readonly ILoggerManager _loggerManager;
     private readonly IMapper _mapper;
     private readonly ITokenManager _tokenManager;
     private readonly IRepositoryManager _repositoryManager;
@@ -21,14 +18,12 @@ public class IdentityManager : IIdentityManager
     private IdentityUser? _user;
 
     public IdentityManager(
-        ILoggerManager loggerManager,
         IMapper mapper,
         ITokenManager tokenManager,
         IRepositoryManager repositoryManager,
         UserManager<IdentityUser> userManager,
         IConfiguration configuration)
     {
-        _loggerManager = loggerManager;
         _mapper = mapper;
         _tokenManager = tokenManager;
         _repositoryManager = repositoryManager;

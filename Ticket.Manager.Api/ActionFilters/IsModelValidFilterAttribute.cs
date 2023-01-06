@@ -1,16 +1,16 @@
-﻿using Issues.Manager.Application.Services.Logger;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Issues.Manager.Api.ActionFilters;
 
 public class IsModelValidFilterAttribute : IActionFilter
 {
-    private readonly ILoggerManager _loggerManager;
+    private readonly ILogger _loggerManager;
 
-    public IsModelValidFilterAttribute(ILoggerManager loggerManager)
+    public IsModelValidFilterAttribute(ILogger<IsModelValidFilterAttribute> loggerManager)
     {
         _loggerManager = loggerManager;
+
     }
     public void OnActionExecuting(ActionExecutingContext context)
     {
