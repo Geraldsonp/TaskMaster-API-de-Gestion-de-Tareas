@@ -1,10 +1,8 @@
-using System.Security.Claims;
 using AutoMapper;
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services;
-using Issues.Manager.Application.Services.Logger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers
