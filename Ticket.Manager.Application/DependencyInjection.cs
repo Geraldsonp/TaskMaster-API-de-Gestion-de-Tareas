@@ -11,7 +11,6 @@ public static class BusinessDependenciesContainer
 {
     public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(BusinessDependenciesContainer));
         services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IIdentityManager, IdentityManager>();
         services.AddScoped<ICommentService, CommentService>();

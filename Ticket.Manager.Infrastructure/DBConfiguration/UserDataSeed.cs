@@ -1,7 +1,6 @@
 ﻿using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Issues.Manager.Infrastructure.DBConfiguration;
 

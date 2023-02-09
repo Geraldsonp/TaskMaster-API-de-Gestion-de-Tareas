@@ -22,7 +22,7 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public IssueReponse Create(CreateIssueRequest createIssueRequest)
+    public TicketDetailsModel Create(CreateIssueRequest createIssueRequest)
     {
         var identityID = UserIdProvider.GetCurrentUserId();
         var userId = _repositoryManager.UsersRepository
@@ -33,33 +33,49 @@ public class IssueService : IIssueService
         issueToSave.UserId = userId;
         _repositoryManager.IssuesRepository.Create(issueToSave);
         _repositoryManager.SaveChanges();
-        return _mapper.Map<IssueReponse>(issueToSave);
+        return _mapper.Map<TicketDetailsModel>(issueToSave);
     }
 
-    public IssueReponse GetById(int id, bool trackChanges = false)
+    public TicketDetailsModel GetById(int id, bool trackChanges = false)
     {
         var issue = _repositoryManager.IssuesRepository.FindByCondition(i => i.Id == id, trackChanges);
         if (issue is null)
         {
             throw new IssueNotFoundException(id);
         }
-        return _mapper.Map<IssueReponse>(issue);
+        return _mapper.Map<TicketDetailsModel>(issue);
     }
 
 
-    public IEnumerable<IssueReponse> GetAll(bool trackChanges = false)
+    public IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters, bool trackChanges = false)
     {
-        var issues = _repositoryManager.IssuesRepository.FindAll(trackChanges).ToList();
-        var issuesDtos = _mapper.Map<IEnumerable<IssueReponse>>(issues);
+        var issues = _repositoryManager.IssuesRepository.FindAll();
+        
+        if (ticketFilters.TicketType is not null)
+        {
+            issues =
+                _repositoryManager.IssuesRepository.FindRangeByCondition(ticket =>
+                    ticket.TicketType == ticketFilters.TicketType);
+        }
+
+        if (ticketFilters.Priority is not null)
+        {
+            issues =
+                _repositoryManager.IssuesRepository.FindRangeByCondition(ticket =>
+                    ticket.Priority == ticketFilters.Priority);
+        }
+
+        var issuesDtos = _mapper.Map<IEnumerable<TicketDetailsModel>>(issues);
+
         return issuesDtos;
     }
 
-    public IssueReponse Update(IssueReponse issueReponse)
+    public TicketDetailsModel Update(TicketDetailsModel ticketDetailsModel)
     {
-        var updatedIssue = _mapper.Map<Ticket>(issueReponse);
+        var updatedIssue = _mapper.Map<Ticket>(ticketDetailsModel);
         _repositoryManager.IssuesRepository.Update(updatedIssue);
         _repositoryManager.SaveChanges();
-        return issueReponse;
+        return ticketDetailsModel;
     }
 
     public void Delete(int id)

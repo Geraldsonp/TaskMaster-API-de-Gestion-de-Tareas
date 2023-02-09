@@ -3,7 +3,7 @@ using Issues.Manager.Api.Models;
 using Issues.Manager.Application.Services.Logger;
 using Issues.Manager.Domain.Exceptions;
 
-namespace Issues.Manager.Api.CustomMiddleware;
+namespace Issues.Manager.Api.Middleware;
 
 public class ExceptionMiddleware
 {

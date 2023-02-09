@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using Issues.Manager.Api.CustomMiddleware;
 using Issues.Manager.Api.Helpers;
+using Issues.Manager.Api.Middleware;
 using Issues.Manager.Api.ServiceConfiguration;
 using Issues.Manager.Application;
 using Issues.Manager.Domain.Contracts;
@@ -31,11 +31,16 @@ builder.Services.AddControllers().AddJsonOptions(
         var enumConverter = new JsonStringEnumConverter();
         opts.JsonSerializerOptions.Converters.Add(enumConverter);
     });
-;
+builder.Services.AddAutoMapper(typeof(BusinessDependenciesContainer), typeof(Program));
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
-await MigrationHelper.RunMigrationsAsync(scope.ServiceProvider);
+
+if (!app.Environment.IsDevelopment())
+{
+    await MigrationHelper.RunMigrationsAsync(scope.ServiceProvider);
+}
+
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();

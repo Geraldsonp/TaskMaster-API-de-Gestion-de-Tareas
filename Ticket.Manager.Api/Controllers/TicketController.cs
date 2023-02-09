@@ -1,5 +1,7 @@
 using System.Security.Claims;
+using AutoMapper;
 using Issues.Manager.Api.ActionFilters;
+using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Services;
 using Issues.Manager.Application.Services.Logger;
@@ -12,37 +14,39 @@ namespace Issues.Manager.Api.Controllers
     public class TicketController : ControllerBase
     {
         private readonly IIssueService _issueService;
+        private readonly IMapper _mapper;
         private string _userId;
 
-        public TicketController(IIssueService issueService)
+        public TicketController(IIssueService issueService, IMapper mapper)
         {
             _issueService = issueService;
+            _mapper = mapper;
         }
 
         // GET: api/Ticket
         [HttpGet]
         [ProducesResponseType(200)]
-        public ActionResult<IEnumerable<IssueReponse>> Get()
+        public ActionResult<IEnumerable<TicketDetailsModel>> Get([FromQuery] TicketFilterQueryParameters ticketFilterQueryParameters)
         {
-            return Ok(_issueService.GetAll());
+            var ticketFilter = _mapper.Map<TicketFilters>(ticketFilterQueryParameters);
+
+            return Ok(_issueService.GetAll(ticketFilter));
         }
 
-        // GET: api/Ticket/5
         [HttpGet("{id}", Name = "GetById")]
-        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [ProducesResponseType(404)]
-        public ActionResult<IssueReponse> Get(int id)
+        public ActionResult<TicketDetailsModel> Get(int id)
         {
-
             var issueDto = _issueService.GetById(id);
             return Ok(issueDto);
         }
 
         // POST: api/Ticket
-        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [HttpPost]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<IssueReponse> Post([FromBody] CreateIssueRequest createdIssueRequest)
+        public ActionResult<TicketDetailsModel> Post([FromBody] CreateIssueRequest createdIssueRequest)
         {
             var result = _issueService.Create(createdIssueRequest);
             return CreatedAtRoute("GetById", new { id = result.Id }, result);
@@ -51,17 +55,17 @@ namespace Issues.Manager.Api.Controllers
         // PUT: api/Ticket/5
         [HttpPut("{id}")]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [ProducesResponseType(404)]
-        public ActionResult<IssueReponse> Put(int id, [FromBody] IssueReponse issueReponseToUpdate)
+        public ActionResult<TicketDetailsModel> Put(int id, [FromBody] TicketDetailsModel ticketDetailsModelToUpdate)
         {
-            var result = _issueService.Update(issueReponseToUpdate);
+            var result = _issueService.Update(ticketDetailsModelToUpdate);
             return Ok(result);
         }
 
         // DELETE: api/Ticket/5
         [HttpDelete("{id}")]
-        [ProducesResponseType(200, Type = typeof(IssueReponse))]
+        [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [ProducesResponseType(404)]
         public ActionResult Delete(int id)
         {

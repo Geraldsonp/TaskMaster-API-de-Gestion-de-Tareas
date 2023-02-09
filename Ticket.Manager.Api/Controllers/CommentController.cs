@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers
 {
-    //[Route("api/[controller]")]
-    [Route("api/[controller]")]
+    [Route("api/ticket/{ticketId:int}/[controller]")]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -19,23 +18,23 @@ namespace Issues.Manager.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<CommentResponse>))]
-        public IActionResult GetAll(int issueId)
+        public IActionResult GetAll(int ticketId)
         {
-            var comments = _commentService.Get(issueId);
+            var comments = _commentService.Get(ticketId);
             return Ok(comments);
         }
 
-        [HttpPost("{issueId:int}")]
+        [HttpPost]
         [ProducesResponseType(200, Type = typeof(CommentResponse))]
         [ProducesResponseType(422)]
         [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public IActionResult Create(CreateCommentRequest comment, [FromRoute] int issueId)
+        public IActionResult Create(CreateCommentRequest comment, [FromRoute] int ticketId)
         {
             if (!ModelState.IsValid)
             {
                 return UnprocessableEntity(comment);
             }
-            var commentResponse = _commentService.Create(comment, issueId);
+            var commentResponse = _commentService.Create(comment, ticketId);
             return Ok(commentResponse);
         }
 

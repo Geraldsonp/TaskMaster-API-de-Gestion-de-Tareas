@@ -10,8 +10,8 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Ticket, IssueReponse>();
-        CreateMap<IssueReponse, Ticket>();
+        CreateMap<Ticket, TicketDetailsModel>();
+        CreateMap<TicketDetailsModel, Ticket>();
         CreateMap<CreateIssueRequest, Ticket>();
         
         //User
