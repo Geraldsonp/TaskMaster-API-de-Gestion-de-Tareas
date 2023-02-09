@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Issues.Manager.Api.Models;
-using Issues.Manager.Application.Services.Logger;
 using Issues.Manager.Domain.Exceptions;
 
 namespace Issues.Manager.Api.Middleware;
@@ -8,9 +7,9 @@ namespace Issues.Manager.Api.Middleware;
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILoggerManager _logger;
+    private readonly ILogger _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger)
+    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
     {
         _next = next;
         _logger = logger;

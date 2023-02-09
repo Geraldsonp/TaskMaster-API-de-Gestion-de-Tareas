@@ -18,6 +18,7 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureFilters();
+builder.Services.AddLogging(logger => logger.AddConsole());
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
