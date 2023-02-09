@@ -24,10 +24,8 @@ public class IssueService : IIssueService
 
     public TicketDetailsModel Create(CreateIssueRequest createIssueRequest)
     {
-        var identityID = UserIdProvider.GetCurrentUserId();
-        var userId = _repositoryManager.UsersRepository
-            .FindByCondition(u =>
-                    u.IdentityId == identityID).Id;
+        var userId = UserIdProvider.GetCurrentUserId();
+
 
         var issueToSave = _mapper.Map<Ticket>(createIssueRequest);
         issueToSave.UserId = userId;

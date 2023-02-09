@@ -28,30 +28,24 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<IdentityUser>().HasOne<User>().WithOne(u => u.IdentityUser)
-            .HasForeignKey<User>(u => u.IdentityId);
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.SeedDb();
         modelBuilder.Entity<Ticket>()
                 .HasQueryFilter(i => i.UserId == GetUserId() );
     }
 
-    private int GetUserId()
+    private string GetUserId()
     {
         if (_httpContextAccessor.HttpContext != null)
         {
             var user = _httpContextAccessor.HttpContext.User;
             var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            return AppUsers.FirstOrDefault(u => u.IdentityId == userIdClaim).Id;
+            return AppUsers.FirstOrDefault(u => u.Id == userIdClaim).Id;
         }
         else
         {
-            return 0;
+            return "0";
         }
     }
-    
-    
-    
-    
-    
+
 }

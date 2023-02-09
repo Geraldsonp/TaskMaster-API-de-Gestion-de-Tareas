@@ -44,7 +44,7 @@ public class IdentityManager : IIdentityManager
 
         User appuser = new()
         {
-            IdentityId = user.Id,
+            Id = user.Id,
             FullName = String.Concat($"{userRegisterRequest.FirstName} {userRegisterRequest.LastName}")
         };
 

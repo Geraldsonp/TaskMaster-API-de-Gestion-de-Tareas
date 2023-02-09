@@ -24,8 +24,7 @@ public static class UserDataSeed
             new User()
             {
                 FullName = "John Doe",
-                Id = 2,
-                IdentityId = id2,
+                Id = id2,
             }
         });
     }
