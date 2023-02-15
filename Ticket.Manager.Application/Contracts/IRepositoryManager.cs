@@ -1,11 +1,10 @@
 ﻿using Issues.Manager.Domain.Entities;
 
-namespace Issues.Manager.Domain.Contracts;
+namespace Issues.Manager.Application.Contracts;
 
 public interface IRepositoryManager
 {
-    IRepositoryBase<Ticket> IssuesRepository { get; }
-    IRepositoryBase<User> UsersRepository { get; }
+    ITaskRepository TaskRepository { get; }
     IRepositoryBase<Comment> CommentsRepository { get; }
     void SaveChanges();
 }

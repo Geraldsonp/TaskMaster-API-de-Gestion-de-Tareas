@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Issues.Manager.Application.DTOs;
+namespace Issues.Manager.Application.Models.User;
 
-public class UserLogInRequest
+public class UserLogInModel
 {
     [Required(ErrorMessage = "User name is required")]
     public string? UserName { get; set; }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Issues.Manager.Application.Contracts;
 using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Services.Token;
-using Issues.Manager.Domain.Contracts;
-using Issues.Manager.Domain.Entities;
+using Issues.Manager.Application.Interfaces;
+using Issues.Manager.Application.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
@@ -31,32 +31,24 @@ public class IdentityManager : IIdentityManager
         _configuration = configuration;
     }
 
-    public async Task<AuthenticationResult> Create(UserRegisterRequest userRegisterRequest)
+    public async Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel)
     {
-        var user = _mapper.Map<IdentityUser>(userRegisterRequest);
+        var user = _mapper.Map<IdentityUser>(userRegisterModel);
 
-        var result = await _userManager.CreateAsync(user, userRegisterRequest.Password);
+        var result = await _userManager.CreateAsync(user, userRegisterModel.Password);
 
         if (!result.Succeeded)
         {
             return new AuthenticationResult(result.Errors);
         }
 
-        User appuser = new()
-        {
-            Id = user.Id,
-            FullName = String.Concat($"{userRegisterRequest.FirstName} {userRegisterRequest.LastName}")
-        };
-
-        _repositoryManager.UsersRepository.Create(appuser);
-        _repositoryManager.SaveChanges();
 
         var token = await _tokenManager.GenerateToken(user);
 
         return new AuthenticationResult(token);
     }
 
-    public async Task<AuthenticationResult> LogIn(UserLogInRequest userForAuth)
+    public async Task<AuthenticationResult> LogIn(UserLogInModel userForAuth)
     {
         _user = await _userManager.FindByNameAsync(userForAuth.UserName);
 

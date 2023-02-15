@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Issues.Manager.Application.Contracts;
 using Issues.Manager.Application.DTOs.Comment;
-using Issues.Manager.Domain.Contracts;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
 
@@ -19,7 +19,7 @@ public class CommentService : ICommentService
     }
     public CommentResponse Create(CreateCommentRequest commentRequest, int issueId)
     {
-        var issue = _repositoryManager.IssuesRepository.FindByCondition(i => i.Id == issueId, true);
+        var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == issueId, true);
 
         if (issue is null)
         {
@@ -70,7 +70,7 @@ public class CommentService : ICommentService
 
     public IEnumerable<CommentResponse> Get(int issueId)
     {
-        var issue = _repositoryManager.IssuesRepository.FindByCondition(i => i.Id == issueId);
+        var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == issueId);
 
         if (issue is null)
         {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Issues.Manager.Application.DTOs;
+namespace Issues.Manager.Application.Models.User;
 
-public class UserRegisterRequest
+public class UserRegisterModel
 {
         [Required(ErrorMessage = "First name is Required")]
         public string? FirstName { get; set; }

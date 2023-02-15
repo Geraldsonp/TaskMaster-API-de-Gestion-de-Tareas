@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Issues.Manager.Domain.Contracts;
+using Issues.Manager.Application.Contracts;
 using Issues.Manager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

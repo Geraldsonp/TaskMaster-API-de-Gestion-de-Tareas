@@ -1,10 +1,10 @@
 ﻿using Issues.Manager.Application.DTOs;
-using Microsoft.AspNetCore.Identity;
+using Issues.Manager.Application.Models.User;
 
 namespace Issues.Manager.Application.Services.Identity;
 
 public interface IIdentityManager
 {
-    Task<AuthenticationResult> Create(UserRegisterRequest userRegisterRequest);
-    Task<AuthenticationResult> LogIn(UserLogInRequest userForAuth);
+    Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel);
+    Task<AuthenticationResult> LogIn(UserLogInModel userForAuth);
 }

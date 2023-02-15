@@ -1,8 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace Issues.Manager.Application.Services.Token;
+namespace Issues.Manager.Application.Interfaces;
 
 public interface ITokenManager
 {

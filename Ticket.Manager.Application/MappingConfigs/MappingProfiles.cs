@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.DTOs.Comment;
+using Issues.Manager.Application.Models.Issue;
+using Issues.Manager.Application.Models.User;
 using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,10 +14,10 @@ public class MappingProfiles : Profile
     {
         CreateMap<Ticket, TicketDetailsModel>();
         CreateMap<TicketDetailsModel, Ticket>();
-        CreateMap<CreateIssueRequest, Ticket>();
+        CreateMap<TicketCreateRequest, Ticket>();
         
         //User
-        CreateMap<UserRegisterRequest, IdentityUser>();
+        CreateMap<UserRegisterModel, IdentityUser>();
         
         
         //Comments

@@ -1,5 +1,7 @@
-﻿using Issues.Manager.Application.Services;
+﻿using Issues.Manager.Application.Interfaces;
+using Issues.Manager.Application.Services;
 using Issues.Manager.Application.Services.Identity;
+using Issues.Manager.Application.Services.Issue;
 using Issues.Manager.Application.Services.Token;
 using Microsoft.Extensions.DependencyInjection;
 

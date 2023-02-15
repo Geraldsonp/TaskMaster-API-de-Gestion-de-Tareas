@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Issues.Manager.Domain.Contracts;
+using Issues.Manager.Application.Contracts;
 
 namespace Issues.Manager.Api.Helpers;
 

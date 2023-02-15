@@ -1,4 +1,4 @@
-﻿using Issues.Manager.Domain.Contracts;
+﻿using Issues.Manager.Application.Contracts;
 using Issues.Manager.Infrastructure.DBConfiguration;
 using Issues.Manager.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +15,9 @@ public static class DependencyInjection
     {
 
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(DatabaseConnectionProvider.GetConnectionString(config)));
+            options.UseInMemoryDatabase("Inmemory"));
+        /*services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(DatabaseConnectionProvider.GetConnectionString(config)));*/
 
         services.AddIdentityCore<IdentityUser>(
             o =>

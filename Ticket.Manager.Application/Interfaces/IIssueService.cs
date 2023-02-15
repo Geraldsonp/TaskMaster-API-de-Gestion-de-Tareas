@@ -1,10 +1,11 @@
 ﻿using Issues.Manager.Application.DTOs;
+using Issues.Manager.Application.Models.Issue;
 
-namespace Issues.Manager.Application.Services;
+namespace Issues.Manager.Application.Interfaces;
 
 public interface IIssueService
 {
-    TicketDetailsModel Create(CreateIssueRequest issueRequest);
+    TicketDetailsModel Create(TicketCreateRequest request);
     TicketDetailsModel GetById(int id , bool trackChanges = false);
     IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters,bool trackChanges = false);
     TicketDetailsModel Update(TicketDetailsModel ticketDetailsModel);

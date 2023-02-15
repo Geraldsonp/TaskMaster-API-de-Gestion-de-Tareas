@@ -1,8 +1,8 @@
 using AutoMapper;
-using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Services;
+using Issues.Manager.Application.Interfaces;
+using Issues.Manager.Application.Models.Issue;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Issues.Manager.Api.Controllers
@@ -43,16 +43,14 @@ namespace Issues.Manager.Api.Controllers
         // POST: api/Ticket
         [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [HttpPost]
-        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-        public ActionResult<TicketDetailsModel> Post([FromBody] CreateIssueRequest createdIssueRequest)
+        public ActionResult<TicketDetailsModel> Post(TicketCreateRequest createdRequest)
         {
-            var result = _issueService.Create(createdIssueRequest);
+            var result = _issueService.Create(createdRequest);
             return CreatedAtRoute("GetById", new { id = result.Id }, result);
         }
 
         // PUT: api/Ticket/5
         [HttpPut("{id}")]
-        [ServiceFilter(typeof(IsModelValidFilterAttribute))]
         [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
         [ProducesResponseType(404)]
         public ActionResult<TicketDetailsModel> Put(int id, [FromBody] TicketDetailsModel ticketDetailsModelToUpdate)

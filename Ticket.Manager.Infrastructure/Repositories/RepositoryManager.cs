@@ -1,4 +1,4 @@
-﻿using Issues.Manager.Domain.Contracts;
+﻿using Issues.Manager.Application.Contracts;
 using Issues.Manager.Domain.Entities;
 
 namespace Issues.Manager.Infrastructure.Repositories;
@@ -6,13 +6,14 @@ namespace Issues.Manager.Infrastructure.Repositories;
 public class RepositoryManager : IRepositoryManager
 {
     private readonly AppDbContext _dbContext;
-    private IRepositoryBase<Ticket>? _issueRepository;
-    private IRepositoryBase<User>? _userRepository;
+    private readonly IUserIdProvider _userIdProvider;
+    private ITaskRepository? _ticketRepository;
     private IRepositoryBase<Comment>? _commentsRepository;
 
-    public RepositoryManager(AppDbContext dbContext)
+    public RepositoryManager(AppDbContext dbContext, IUserIdProvider userIdProvider)
     {
         _dbContext = dbContext;
+        _userIdProvider = userIdProvider;
     }
 
     public IRepositoryBase<Comment>?  CommentsRepository
@@ -29,33 +30,20 @@ public class RepositoryManager : IRepositoryManager
         
     }
 
-    public IRepositoryBase<Ticket>?  IssuesRepository
+    public ITaskRepository?  TaskRepository
     {
         get
         {
-            if (_issueRepository == null)
+            if (_ticketRepository == null)
             {
-                _issueRepository = new RepositoryBase<Ticket>(_dbContext);
+                _ticketRepository = new TicketRepository(_dbContext, _userIdProvider);
             }
 
 
-            return _issueRepository;
+            return _ticketRepository;
         }
     }
 
-    public IRepositoryBase<User>?  UsersRepository
-    {
-        get
-        {
-            if (_userRepository == null)
-            {
-                _userRepository = new RepositoryBase<User>(_dbContext);
-            }
-
-            return _userRepository;
-        }
-    }
-    
     public void SaveChanges()
     {
         _dbContext.SaveChanges();

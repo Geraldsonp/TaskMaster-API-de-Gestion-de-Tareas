@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿using Issues.Manager.Application.Contracts;
 using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Issues.Manager.Domain.Entities;
@@ -11,18 +11,19 @@ namespace Issues.Manager.Infrastructure;
 public class AppDbContext : IdentityDbContext<IdentityUser>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserIdProvider _userIdProvider;
 
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor, IUserIdProvider userIdProvider) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
+        _userIdProvider = userIdProvider;
     }
     
     public DbSet<Ticket> Tickets { get; set; }
 
     public DbSet<Comment> Comments { get; set; }
-    public DbSet<User> AppUsers { get; set; }
-  
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,22 +31,6 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.SeedDb();
-        modelBuilder.Entity<Ticket>()
-                .HasQueryFilter(i => i.UserId == GetUserId() );
-    }
-
-    private string GetUserId()
-    {
-        if (_httpContextAccessor.HttpContext != null)
-        {
-            var user = _httpContextAccessor.HttpContext.User;
-            var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            return AppUsers.FirstOrDefault(u => u.Id == userIdClaim).Id;
-        }
-        else
-        {
-            return "0";
-        }
     }
 
 }

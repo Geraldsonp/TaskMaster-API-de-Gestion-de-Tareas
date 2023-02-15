@@ -1,5 +1,6 @@
 using Issues.Manager.Api.ActionFilters;
 using Issues.Manager.Application.DTOs;
+using Issues.Manager.Application.Models.User;
 using Issues.Manager.Application.Services.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,7 @@ public class UserController : ControllerBase
 
     // POST: User/Register
     [HttpPost]
-    [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-    public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest userForRegistration)
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegisterModel userForRegistration)
     {
         var result = await _identityManager.Create(userForRegistration);
 
@@ -39,10 +39,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("Login")]
-    [ServiceFilter(typeof(IsModelValidFilterAttribute))]
-    public async Task<IActionResult> Login([FromBody] UserLogInRequest userLogInRequest)
+    public async Task<IActionResult> Login([FromBody] UserLogInModel userLogInModel)
     {
-        var result = await _identityManager.LogIn(userLogInRequest);
+        var result = await _identityManager.LogIn(userLogInModel);
 
         if (!result.IsSuccess)
         {

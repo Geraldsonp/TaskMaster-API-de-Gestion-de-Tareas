@@ -19,13 +19,5 @@ public static class UserDataSeed
                 Id = id2
             },
         });
-        builder.Entity<User>().HasData(new[]
-        {
-            new User()
-            {
-                FullName = "John Doe",
-                Id = id2,
-            }
-        });
     }
 }
