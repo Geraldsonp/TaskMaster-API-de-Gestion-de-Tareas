@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>TicketManager.Test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,5 +35,6 @@
     <ItemGroup>
       <Folder Include="Comments" />
     </ItemGroup>
+    
 
 </Project>

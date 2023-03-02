@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AplicationLayer.Test", "Apl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{455B6BC9-381C-447D-A35A-46F0CB57ACE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManager.Test", "TicketManager.Test\TicketManager.Test.csproj", "{CE239604-C228-4AC0-A49F-00AF653D7949}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagerApi.Test", "TicketManagerApi.Test\TicketManagerApi.Test.csproj", "{CE239604-C228-4AC0-A49F-00AF653D7949}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

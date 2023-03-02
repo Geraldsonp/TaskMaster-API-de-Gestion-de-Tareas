@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
@@ -27,7 +28,6 @@ namespace Issues.Manager.Api.Controllers
         public ActionResult<IEnumerable<TicketDetailsModel>> Get([FromQuery] TicketFilterQueryParameters ticketFilterQueryParameters)
         {
             var ticketFilter = _mapper.Map<TicketFilters>(ticketFilterQueryParameters);
-
             return Ok(_issueService.GetAll(ticketFilter));
         }
 
@@ -51,12 +51,12 @@ namespace Issues.Manager.Api.Controllers
 
         // PUT: api/Ticket/5
         [HttpPut("{id}")]
-        [ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
-        [ProducesResponseType(404)]
-        public ActionResult<TicketDetailsModel> Put(int id, [FromBody] TicketDetailsModel ticketDetailsModelToUpdate)
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public ActionResult Put(int id, [FromBody] TicketUpdateRequest updateRequest)
         {
-            var result = _issueService.Update(ticketDetailsModelToUpdate);
-            return Ok(result);
+            _issueService.Update(id, updateRequest);
+            return NoContent();
         }
 
         // DELETE: api/Ticket/5

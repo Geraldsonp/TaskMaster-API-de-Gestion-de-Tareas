@@ -70,12 +70,30 @@ public class IssueService : IIssueService
         return issuesDtos;
     }
 
-    public TicketDetailsModel Update(TicketDetailsModel ticketDetailsModel)
+    public void Update(int id, TicketUpdateRequest updateRequest)
     {
-        var updatedIssue = _mapper.Map<Ticket>(ticketDetailsModel);
-        _repositoryManager.TaskRepository.Update(updatedIssue);
+        var ticket = _repositoryManager.TaskRepository.FindByCondition(ticket => ticket.Id == id);
+
+        if (ticket is null)
+        {
+            throw new IssueNotFoundException(id);
+        }
+
+        if (updateRequest.TicketType is not null)
+            ticket.TicketType = updateRequest.TicketType.Value;
+
+        if (updateRequest.Priority is not null)
+            ticket.Priority = updateRequest.Priority.Value;
+
+        if (updateRequest.Description is not null)
+            ticket.Description = updateRequest.Description;
+
+        if (updateRequest.Title is not null)
+            ticket.Title = updateRequest.Title;
+
+        _repositoryManager.TaskRepository.Update(ticket);
+
         _repositoryManager.SaveChanges();
-        return ticketDetailsModel;
     }
 
     public void Delete(int id)

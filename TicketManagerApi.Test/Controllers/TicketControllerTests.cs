@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,12 +7,14 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.Xunit2;
 using FluentAssertions;
 using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Models.Issue;
 using Issues.Manager.Domain.Enums;
 using Issues.Manager.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +26,8 @@ namespace TicketManager.Test.Controllers;
 public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _httpClient;
-    private readonly IServiceScope _scopedServiceProvider;
-    private readonly IdentityHelper _identityHelper;
+    private readonly AppDbContext? _context;
+    private readonly IdentityUser? _user;
 
     public TicketControllerTests(WebApplicationFactory<Program> factory)
     {
@@ -36,17 +39,18 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
             });
         });
         _httpClient = factory.CreateClient();
-        _scopedServiceProvider = factory.Services.CreateScope();
-        _identityHelper = new IdentityHelper(_httpClient);
+        var scopedServiceProvider = factory.Services.CreateScope();
+        var identityHelper = new IdentityHelper(_httpClient);
+        var token =  identityHelper.AuthenticateUser();
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Result);
+        _context = scopedServiceProvider.ServiceProvider.GetService<AppDbContext>();
+        _user = _context?.Users.FirstOrDefault(x => x.Email == "Testing@Email.com");
     }
 
     [Fact]
     public async Task CreateTicket_ReturnsBadRequest_WhenInvalidData()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
         var request = new TicketCreateRequest
         {
             Priority = Priority.High,
@@ -66,9 +70,6 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
     public async Task CreateTicket_ReturnsCreated_WhenValidData()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
         var request = new TicketCreateRequest
         {
             Description = "testing",
@@ -88,16 +89,13 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
     public async Task GetTickets_ReturnsListOfTickets_WhenCalled()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var context = _scopedServiceProvider.ServiceProvider.GetService<AppDbContext>();
+        if (_user?.Id != null)
+        {
 
-        var user = context.Users.FirstOrDefault(x => x.Email == "Testing@Email.com");
+            await CreateTicketsForCurrentUser(_user?.Id, 3);
+        }
 
-        if (user?.Id != null)
-            await CreateTicketsForCurrentUser(user?.Id, 3);
-
-        var tasksCount = context.Tickets.ToList().Count;
+        var tasksCount = _context.Tickets.ToList().Count;
 
         //Act
         var response = await _httpClient.GetAsync("api/Ticket");
@@ -114,7 +112,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
     public async Task GetTickets_ReturnsBadRequest_WhenNotAuthorized()
     {
         //Arrange
-
+        _httpClient.DefaultRequestHeaders.Clear();
 
         //Act
         var response = await _httpClient.GetAsync("api/Ticket");
@@ -128,20 +126,14 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
     public async Task GetTicket_PriorityFilterParameters_ReturnsFilteredList()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var context = _scopedServiceProvider.ServiceProvider.GetService<AppDbContext>();
-
-        var user = context.Users.FirstOrDefault(x => x.Email == "Testing@Email.com");
-
-        if (user?.Id != null)
-            await CreateTicketsForCurrentUser(user?.Id, 10);
+        if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, 10);
         var queryParameters = new TicketFilterQueryParameters()
         {
             Priority = Priority.High
         };
 
-        var tasks = context.Tickets.ToList().Where(task => task.Priority == queryParameters.Priority);
+        var tasks = _context.Tickets.ToList().Where(task => task.Priority == queryParameters.Priority);
         var tasksCount = tasks.Count();
 
 
@@ -160,16 +152,10 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
     public async Task GetTicket_TicketTypeParameters_ReturnsFilteredList()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var context = _scopedServiceProvider.ServiceProvider.GetService<AppDbContext>();
+         if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, 10);
 
-        var user = context.Users.FirstOrDefault(x => x.Email == "Testing@Email.com");
-
-        if (user?.Id != null)
-            await CreateTicketsForCurrentUser(user?.Id, 10);
-
-        var tasks = context.Tickets.ToList().Where(task => task.TicketType == TicketType.Feature);
+        var tasks = _context.Tickets.ToList().Where(task => task.TicketType == TicketType.Feature);
         var tasksCount = tasks.Count();
 
 
@@ -183,23 +169,16 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         tickets.Count().Should().Be(tasksCount);
     }
+
     [Fact]
     public async Task GetTicket_TicketTypeAndPriorityFilterParameters_ReturnsFilteredList()
     {
         //Arrange
-        var token = await _identityHelper.AuthenticateUser();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var context = _scopedServiceProvider.ServiceProvider.GetService<AppDbContext>();
+        if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, 10);
 
-        var user = context.Users.FirstOrDefault(x => x.Email == "Testing@Email.com");
-
-        if (user?.Id != null)
-            await CreateTicketsForCurrentUser(user?.Id, 10);
-
-        var tasks = context.Tickets.ToList().Where(task => task.TicketType == TicketType.Bug && task.Priority == Priority.Low);
+        var tasks = _context.Tickets.ToList().Where(task => task.TicketType == TicketType.Bug && task.Priority == Priority.Low);
         var tasksCount = tasks.Count();
-
-
 
         //Act
         var response = await _httpClient.GetAsync("api/Ticket?ticketType=Bug&priority=Low");
@@ -209,6 +188,93 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         tickets.Count().Should().Be(tasksCount);
+    }
+
+    [Fact]
+    public async Task GetTicketById_WhenGivenValidId_Return200OkAndTicket()
+    {
+        //Arrange
+        if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, 4);
+
+        //Act
+        var response = await _httpClient.GetAsync($"api/Ticket/{4}");
+        var responseString = response.Content.ReadAsStringAsync();
+        var taskObject = await response.Content.ReadFromJsonAsync<TicketDetailsModel>();
+
+        //Assert
+        response.IsSuccessStatusCode.Should().BeTrue();
+        taskObject.Id.Should().Be(4);
+    }
+
+    [Theory, AutoData]
+    public async Task UpdateTicket_WhenGivenValidData_UpdatesModelReturns200Ok(string description, TicketType ticketType, Priority priority, string title )
+    {
+        //Arrange
+        await CreateTicketsForCurrentUser(_user.Id, 3);
+        var ticketDetails = await _httpClient.GetFromJsonAsync<TicketDetailsModel>($"api/Ticket/{2}");
+        var updateRequest = new TicketUpdateRequest()
+        {
+            Description = description,
+            TicketType = ticketType,
+            Priority = priority,
+            Title = title
+        };
+
+        //Act
+        var response = await _httpClient.PutAsJsonAsync($"api/Ticket/{2}", updateRequest);
+
+        var getResponse = await _httpClient.GetAsync($"api/Ticket/{2}");
+        getResponse.IsSuccessStatusCode.Should().BeTrue();
+        var ticketDetailsUpdated = await getResponse.Content.ReadFromJsonAsync<TicketDetailsModel>();
+
+        ticketDetailsUpdated.TicketType.Should().Be(ticketType);
+        ticketDetailsUpdated.Priority.Should().Be(priority);
+        ticketDetailsUpdated.Description.Should().Be(description);
+        ticketDetailsUpdated.Title.Should().Be(title);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task DeleteTicket_WhenGivenValidId_Return200Ok()
+    {
+        //Arrange
+        var ticketsCount = 4;
+
+        if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, ticketsCount);
+
+        //Act
+        var deleteResponse = await _httpClient.DeleteAsync($"api/Ticket/{4}");
+        var responseString = deleteResponse.Content.ReadAsStringAsync();
+
+        var getTicketsResponse = await _httpClient.GetAsync("api/Ticket");
+        var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<TicketDetailsModel>>();
+
+        //Assert
+        deleteResponse.IsSuccessStatusCode.Should().BeTrue();
+        tickets.Count().Should().Be(ticketsCount - 1);
+    }
+
+    [Fact]
+    public async Task DeleteTicket_WhenGivenInValidId_Return404NotFound()
+    {
+        //Arrange
+        var ticketsCount = 4;
+
+        if (_user?.Id != null)
+            await CreateTicketsForCurrentUser(_user?.Id, ticketsCount);
+
+        //Act
+        var deleteResponse = await _httpClient.DeleteAsync($"api/Ticket/{5}");
+        var responseString = deleteResponse.Content.ReadAsStringAsync();
+
+        var getTicketsResponse = await _httpClient.GetAsync("api/Ticket");
+        var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<TicketDetailsModel>>();
+
+        //Assert
+        deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        tickets.Count().Should().Be(ticketsCount);
     }
 
     #region HelperMethods

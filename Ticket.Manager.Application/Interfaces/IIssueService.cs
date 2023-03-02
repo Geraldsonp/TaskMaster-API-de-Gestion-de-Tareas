@@ -8,6 +8,6 @@ public interface IIssueService
     TicketDetailsModel Create(TicketCreateRequest request);
     TicketDetailsModel GetById(int id , bool trackChanges = false);
     IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters,bool trackChanges = false);
-    TicketDetailsModel Update(TicketDetailsModel ticketDetailsModel);
+    void Update(int id, TicketUpdateRequest updateRequest);
     void Delete(int id);
 }
