@@ -3,12 +3,17 @@
 
 ------------
 
-## Project Description
+## Descripción del Proyecto:
 
-Este Projecto es una web api la cual es usada para permitir a los usuarios registrarse, iniciar session, crear tickets, editar eliminar y asignar tickets.
+Este proyecto es una API web .NET 6 para la gestión de tareas que ya ha sido construida. La API ha sido desarrollada utilizando C# y .NET, y utiliza SQLLite como base de datos. Además, la API utiliza AutoMapper y EF Core para proporcionar un mapeo y persistencia eficientes de datos. Los tokens JWT se utilizan para la autenticación y autorización.
 
-Asp.net es un framework robusto el cual me permitio desarrollar este projecto de mas sencilla, utilize como base de datos SQL con entity framework core porque esta combinacion me permitio almacenar datos y modificarlos de manera rapido y sin muchas complicaciones.
-Para la autenticacion y seguridad utilize JWTTokens porque debido a su funcionamiento son muy utiles a la hora de asegurar web apis.
+La API permite a los usuarios crear, leer, actualizar y eliminar tareas. Cada tarea tiene un título, descripción, estado (por ejemplo, en progreso, completada) y una fecha de vencimiento. Los usuarios pueden ver todas sus tareas, así como filtrar tareas según su estado o fecha de vencimiento.
+
+La API también tiene autenticación y autorización de usuario mediante tokens JWT. Los usuarios pueden registrarse para obtener una cuenta e iniciar sesión en el sistema utilizando su correo electrónico y contraseña. Una vez autenticados, los usuarios reciben un token JWT que se utiliza para las llamadas posteriores a la API para verificar su identidad y autorización para realizar ciertas acciones.
+
+La API está diseñada utilizando una arquitectura en capas, con capas separadas para la presentación, la lógica de negocio y el acceso a datos. La capa de presentación maneja las solicitudes y respuestas HTTP, la capa de lógica de negocio contiene las reglas y operaciones comerciales, y la capa de acceso a datos es responsable de recuperar y persistir datos de la base de datos SQLLite.
+
+En general, este proyecto proporciona a los usuarios una forma simple y eficiente de gestionar sus tareas, al mismo tiempo que proporciona una API segura y escalable utilizando las últimas tecnologías de .NET 6.
 
 al contruir este projecto pude ampliar mis conocimientos en cuanto a la organizacion del projecto, diferentes tipos de relaciones en la base de datos, el mappeo automatico de objetos Resfull API y la injeccion de dependencias. 
 
