@@ -21,8 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ticket.Manager.Application\Ticket.Manager.Application.csproj" />
-      <ProjectReference Include="..\Ticket.Manager.Infrastructure\Ticket.Manager.Infrastructure.csproj" />
+      <ProjectReference Include="..\TaskMaster.Application\TaskMaster.Application.csproj" />
+      <ProjectReference Include="..\TaskMaster.Infrastructure\TaskMaster.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

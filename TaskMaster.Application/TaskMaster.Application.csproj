@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ticket.Manager.Domain\Ticket.Manager.Domain.csproj" />
+      <ProjectReference Include="..\TaskMaster.Domain\TaskMaster.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

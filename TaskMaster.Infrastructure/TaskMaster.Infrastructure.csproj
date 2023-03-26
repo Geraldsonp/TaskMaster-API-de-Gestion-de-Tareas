@@ -9,8 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ticket.Manager.Application\Ticket.Manager.Application.csproj" />
-      <ProjectReference Include="..\Ticket.Manager.Domain\Ticket.Manager.Domain.csproj" />
+      <ProjectReference Include="..\TaskMaster.Application\TaskMaster.Application.csproj" />
+      <ProjectReference Include="..\TaskMaster.Domain\TaskMaster.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,10 +23,6 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.1" />
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.1" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Identity" />
     </ItemGroup>
 
 </Project>
