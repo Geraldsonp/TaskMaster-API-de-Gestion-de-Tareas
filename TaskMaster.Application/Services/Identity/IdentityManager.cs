@@ -12,9 +12,7 @@ public class IdentityManager : IIdentityManager
 {
     private readonly IMapper _mapper;
     private readonly ITokenManager _tokenManager;
-    private readonly IRepositoryManager _repositoryManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IConfiguration _configuration;
     private IdentityUser? _user;
 
     public IdentityManager(
@@ -26,9 +24,7 @@ public class IdentityManager : IIdentityManager
     {
         _mapper = mapper;
         _tokenManager = tokenManager;
-        _repositoryManager = repositoryManager;
         _userManager = userManager;
-        _configuration = configuration;
     }
 
     public async Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel)

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Issues.Manager.Application.Contracts;
 using Issues.Manager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +8,9 @@ namespace Issues.Manager.Infrastructure.Repositories;
 public class TicketRepository : RepositoryBase<Ticket>, ITaskRepository
 {
     private readonly AppDbContext _dbContext;
-    private readonly IUserIdProvider _userIdProvider;
+    private readonly IAuthenticationStateService _userIdProvider;
 
-    public TicketRepository(AppDbContext dbContext, IUserIdProvider userIdProvider) : base(dbContext)
+    public TicketRepository(AppDbContext dbContext, IAuthenticationStateService userIdProvider) : base(dbContext)
     {
         _dbContext = dbContext;
         _userIdProvider = userIdProvider;

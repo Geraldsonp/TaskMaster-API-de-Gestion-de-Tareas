@@ -19,7 +19,7 @@ builder.Services.ConfigureFilters();
 builder.Services.AddLogging(logger => logger.AddConsole());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureJwt(builder.Configuration);
-builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
+builder.Services.AddSingleton<IAuthenticationStateService, UserIdProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddControllers();

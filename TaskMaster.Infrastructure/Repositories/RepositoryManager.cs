@@ -1,4 +1,4 @@
-﻿using Issues.Manager.Application.Contracts;
+using Issues.Manager.Application.Contracts;
 using Issues.Manager.Domain.Entities;
 
 namespace Issues.Manager.Infrastructure.Repositories;
@@ -6,11 +6,11 @@ namespace Issues.Manager.Infrastructure.Repositories;
 public class RepositoryManager : IRepositoryManager
 {
     private readonly AppDbContext _dbContext;
-    private readonly IUserIdProvider _userIdProvider;
+    private readonly IAuthenticationStateService _userIdProvider;
     private ITaskRepository? _ticketRepository;
     private IRepositoryBase<Comment>? _commentsRepository;
 
-    public RepositoryManager(AppDbContext dbContext, IUserIdProvider userIdProvider)
+    public RepositoryManager(AppDbContext dbContext, IAuthenticationStateService userIdProvider)
     {
         _dbContext = dbContext;
         _userIdProvider = userIdProvider;

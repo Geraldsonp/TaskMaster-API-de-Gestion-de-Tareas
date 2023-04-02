@@ -3,7 +3,7 @@ using Issues.Manager.Application.Contracts;
 
 namespace Issues.Manager.Api.Helpers;
 
-public class UserIdProvider : IUserIdProvider
+public class UserIdProvider : IAuthenticationStateService
 {
     private readonly IHttpContextAccessor _contextAccessor;
     public UserIdProvider(IHttpContextAccessor contextAccessor)

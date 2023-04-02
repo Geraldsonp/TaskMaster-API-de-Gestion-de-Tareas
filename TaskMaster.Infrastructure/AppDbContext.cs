@@ -1,4 +1,4 @@
-﻿using Issues.Manager.Application.Contracts;
+using Issues.Manager.Application.Contracts;
 using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Issues.Manager.Domain.Entities;
@@ -11,10 +11,10 @@ namespace Issues.Manager.Infrastructure;
 public class AppDbContext : IdentityDbContext<IdentityUser>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserIdProvider _userIdProvider;
+    private readonly IAuthenticationStateService _userIdProvider;
 
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor, IUserIdProvider userIdProvider) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor, IAuthenticationStateService userIdProvider) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
         _userIdProvider = userIdProvider;
