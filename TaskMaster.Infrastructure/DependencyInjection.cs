@@ -14,10 +14,10 @@ public static class DependencyInjection
         IConfiguration config)
     {
 
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseInMemoryDatabase("Inmemory"));
         /*services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(DatabaseConnectionProvider.GetConnectionString(config)));*/
+
+        services.AddSqlite<AppDbContext>("Data Source=SqliteDb.db");
 
         services.AddIdentityCore<IdentityUser>(
             o =>

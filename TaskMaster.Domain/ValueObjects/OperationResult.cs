@@ -2,9 +2,24 @@
 
 namespace Issues.Manager.Domain.ValueObjects;
 
-public class OperationResult
+public class DomainResult<T>
 {
-    public bool IsSuccess { get; set; }
-    public string? ErrorMessage { get; set; }
-    public BaseEntity? ObjectFromOperation { get; set; } = null;
+	public DomainResult(T data)
+	{
+		IsSuccess = true;
+		Data = data;
+
+	}
+
+	public DomainResult(string errorMessage)
+	{
+		IsSuccess = true;
+		ErrorMessage = errorMessage;
+	}
+
+	public bool IsSuccess { get; set; }
+	public string? ErrorMessage { get; set; }
+	public T Data { get; set; }
+
+
 }

@@ -10,20 +10,22 @@ namespace Issues.Manager.Application.MappingConfigs;
 
 public class MappingProfiles : Profile
 {
-    public MappingProfiles()
-    {
-        CreateMap<Ticket, TicketDetailsModel>();
-        CreateMap<TicketDetailsModel, Ticket>();
-        CreateMap<TicketCreateRequest, Ticket>();
-        
-        //User
-        CreateMap<UserRegisterModel, IdentityUser>();
-        
-        
-        //Comments
-        CreateMap<CreateCommentRequest, Comment>();
-        CreateMap<Comment, CommentResponse>();
-        CreateMap<CreateCommentRequest, CommentResponse>();
-    }
-    
+	public MappingProfiles()
+	{
+		CreateMap<Ticket, TicketDetailsModel>();
+		CreateMap<TicketDetailsModel, Ticket>();
+		CreateMap<TicketCreateRequest, Ticket>();
+
+		//User
+		CreateMap<UserRegisterModel, IdentityUser>();
+
+
+		//Comments
+		CreateMap<CreateCommentRequest, Comment>();
+		CreateMap<Comment, CommentResponse>();
+		CreateMap<CreateCommentRequest, CommentResponse>();
+
+
+	}
+
 }

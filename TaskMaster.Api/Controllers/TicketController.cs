@@ -4,7 +4,11 @@ using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Interfaces;
 using Issues.Manager.Application.Models.Issue;
+using Issues.Manager.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Domain.ValueObjects;
 
 namespace Issues.Manager.Api.Controllers
 {
@@ -25,15 +29,17 @@ namespace Issues.Manager.Api.Controllers
 		// GET: api/Ticket
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public ActionResult<IEnumerable<TicketDetailsModel>> Get([FromQuery] TicketFilterQuery ticketFilterQueryParameters, [FromQuery] PagingQueryParameters pagging)
+		public ActionResult<IEnumerable<TicketDetailsModel>> Get([FromQuery] TicketFilterQuery ticketFilterQueryParameters, [FromQuery] Paggination pagging)
 		{
 
 			var ticketFilter = _mapper.Map<TicketFilters>(ticketFilterQueryParameters);
-			return Ok(_issueService.GetAll(ticketFilter, pagging));
+
+			var tickets = _issueService.GetAll(ticketFilter, pagging);
+			return Ok(new Response<IEnumerable<TicketDetailsModel>>(tickets));
 		}
 
 		[HttpGet("{id}", Name = "GetById")]
-		[ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
+		[ProducesResponseType(200, Type = typeof(Response<TicketDetailsModel>))]
 		[ProducesResponseType(404)]
 		public ActionResult<TicketDetailsModel> Get(int id)
 		{

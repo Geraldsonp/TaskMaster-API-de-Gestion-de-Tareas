@@ -5,6 +5,7 @@ using Issues.Manager.Application.Interfaces;
 using Issues.Manager.Application.Models.Issue;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
+using TaskMaster.Domain.ValueObjects;
 
 namespace Issues.Manager.Application.Services.Issue;
 
@@ -47,7 +48,7 @@ public class IssueService : IIssueService
 	}
 
 
-	public IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters, PaggingOptions paggingOptions)
+	public IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters, Paggination paggingOptions)
 	{
 		var issues = _repositoryManager.TaskRepository.FindAll();
 
@@ -56,6 +57,7 @@ public class IssueService : IIssueService
 			issues =
 				issues.Where(ticket =>
 					ticket.TicketType == ticketFilters.TicketType);
+
 		}
 
 		if (ticketFilters.Priority is not null)
@@ -65,7 +67,7 @@ public class IssueService : IIssueService
 					ticket.Priority == ticketFilters.Priority);
 		}
 
-		var issuesDtos = _mapper.Map<IEnumerable<TicketDetailsModel>>(issues.ToList());
+		var issuesDtos = _mapper.Map<IEnumerable<TicketDetailsModel>>(issues.Skip(paggingOptions.PageNumber * paggingOptions.PageSize).Take(paggingOptions.PageSize).ToList());
 
 		return issuesDtos;
 	}
@@ -79,17 +81,7 @@ public class IssueService : IIssueService
 			throw new IssueNotFoundException(id);
 		}
 
-		if (updateRequest.TicketType is not null)
-			ticket.TicketType = updateRequest.TicketType.Value;
-
-		if (updateRequest.Priority is not null)
-			ticket.Priority = updateRequest.Priority.Value;
-
-		if (updateRequest.Description is not null)
-			ticket.Description = updateRequest.Description;
-
-		if (updateRequest.Title is not null)
-			ticket.Title = updateRequest.Title;
+		_mapper.Map(ticket, updateRequest);
 
 		_repositoryManager.TaskRepository.Update(ticket);
 

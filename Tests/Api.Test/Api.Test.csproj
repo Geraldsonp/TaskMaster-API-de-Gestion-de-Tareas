@@ -29,6 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\TaskMaster.Application\TaskMaster.Application.csproj" />
+      <ProjectReference Include="..\..\TaskMaster.Infrastructure\TaskMaster.Infrastructure.csproj" />
       <ProjectReference Include="..\TaskMaster.Api\TaskMaster.Api.csproj" />
     </ItemGroup>
 

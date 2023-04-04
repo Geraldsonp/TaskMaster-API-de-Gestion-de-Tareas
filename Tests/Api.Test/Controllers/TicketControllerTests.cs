@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using FluentAssertions;
-using Issues.Manager.Api.Contracts;
 using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Models.Issue;
 using Issues.Manager.Domain.Enums;
@@ -18,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using TicketManager.Test.Configuration;
 using Xunit;
 
@@ -128,7 +127,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
         //Arrange
         if (_user?.Id != null)
             await CreateTicketsForCurrentUser(_user?.Id, 10);
-        var queryParameters = new TicketFilterQueryParameters()
+        var queryParameters = new TicketFilters()
         {
             Priority = Priority.High
         };

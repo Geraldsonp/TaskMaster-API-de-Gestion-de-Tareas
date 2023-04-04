@@ -28,9 +28,9 @@ builder.Services.AddAutoMapper(typeof(BusinessDependenciesContainer), typeof(Pro
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    await MigrationHelper.RunMigrationsAsync(scope.ServiceProvider);
+	await MigrationHelper.RunMigrationsAsync(scope.ServiceProvider);
 }
 
 // Configure the HTTP request pipeline.
@@ -46,7 +46,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers()
-    .RequireAuthorization();
+	.RequireAuthorization();
 
 app.Run();
 
