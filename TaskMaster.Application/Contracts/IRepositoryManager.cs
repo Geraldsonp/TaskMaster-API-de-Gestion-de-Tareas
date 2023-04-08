@@ -2,9 +2,9 @@
 
 namespace Issues.Manager.Application.Contracts;
 
-public interface IRepositoryManager
+public interface IUnitOfWork
 {
-    ITaskRepository TaskRepository { get; }
-    IRepositoryBase<Comment> CommentsRepository { get; }
-    void SaveChanges();
+	ITaskEntityRepository TaskRepository { get; }
+	IRepositoryBase<Comment> CommentsRepository { get; }
+	void SaveChanges();
 }

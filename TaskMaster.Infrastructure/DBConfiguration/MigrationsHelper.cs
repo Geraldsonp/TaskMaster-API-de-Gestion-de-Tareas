@@ -16,7 +16,7 @@ public static class MigrationHelper
 
 		var userId = dbContext.Users.FirstOrDefault(x => x.Email == "GeraldTest@email.com")?.Id;
 
-		if (!dbContext.Tickets.Any() && userId != null)
+		if (dbContext.Tickets.Any() && userId != null)
 		{
 			DateTime startDate = DateTime.Today.AddMonths(-12);
 			DateTime endDate = DateTime.Today;
@@ -27,7 +27,7 @@ public static class MigrationHelper
 			.RuleFor(x => x.PostedDate, x => x.Date.RecentOffset(5, startDate).DateTime)
 			.RuleFor(x => x.Content, x => x.Lorem.Lines());
 
-			var ticketssFaker = new Faker<Ticket>()
+			var ticketssFaker = new Faker<TaskDomainEntity>()
 
 			.RuleFor(x => x.Comments, c => commentsFaker.Generate(5))
 			.RuleFor(x => x.CompletedAt, d => d.Date.Between(startDate, endDate).OrNull(d, 0.25f))

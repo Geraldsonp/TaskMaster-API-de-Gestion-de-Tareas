@@ -1,26 +1,23 @@
 using System.Net;
 using AutoMapper;
 using Issues.Manager.Api.Contracts;
-using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Application.Models.Issue;
-using Issues.Manager.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Application.TaskEntity.Dtos;
 using TaskMaster.Domain.ValueObjects;
 
 namespace Issues.Manager.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class TicketController : ControllerBase
+	public class TaskController : ControllerBase
 	{
-		private readonly IIssueService _issueService;
+		private readonly ITaskEntityService _issueService;
 		private readonly IMapper _mapper;
 		private string _userId;
 
-		public TicketController(IIssueService issueService, IMapper mapper)
+		public TaskController(ITaskEntityService issueService, IMapper mapper)
 		{
 			_issueService = issueService;
 			_mapper = mapper;
@@ -29,28 +26,30 @@ namespace Issues.Manager.Api.Controllers
 		// GET: api/Ticket
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public ActionResult<IEnumerable<TicketDetailsModel>> Get([FromQuery] TicketFilterQuery ticketFilterQueryParameters, [FromQuery] Paggination pagging)
+		public ActionResult<IEnumerable<TaskEntityDto>> Get([FromQuery] TicketFilterQuery ticketFilterQueryParameters, [FromQuery] Paggination pagging)
 		{
 
-			var ticketFilter = _mapper.Map<TicketFilters>(ticketFilterQueryParameters);
+			var ticketFilter = _mapper.Map<TaskFilter>(ticketFilterQueryParameters);
 
 			var tickets = _issueService.GetAll(ticketFilter, pagging);
-			return Ok(new Response<IEnumerable<TicketDetailsModel>>(tickets));
+
+
+			return Ok(new Response<PagedResponse<TaskEntityDto>>(tickets));
 		}
 
 		[HttpGet("{id}", Name = "GetById")]
-		[ProducesResponseType(200, Type = typeof(Response<TicketDetailsModel>))]
+		[ProducesResponseType(200, Type = typeof(Response<TaskEntityDto>))]
 		[ProducesResponseType(404)]
-		public ActionResult<TicketDetailsModel> Get(int id)
+		public ActionResult<TaskEntityDto> Get(int id)
 		{
 			var issueDto = _issueService.GetById(id);
 			return Ok(issueDto);
 		}
 
 		// POST: api/Ticket
-		[ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
+		[ProducesResponseType(200, Type = typeof(TaskEntityDto))]
 		[HttpPost]
-		public ActionResult<TicketDetailsModel> Post(TicketCreateRequest createdRequest)
+		public ActionResult<TaskEntityDto> Post(TaskCreateDto createdRequest)
 		{
 			var result = _issueService.Create(createdRequest);
 			return CreatedAtRoute("GetById", new { id = result.Id }, result);
@@ -60,7 +59,7 @@ namespace Issues.Manager.Api.Controllers
 		[HttpPut("{id}")]
 		[ProducesResponseType((int)HttpStatusCode.NoContent)]
 		[ProducesResponseType((int)HttpStatusCode.NotFound)]
-		public ActionResult Put(int id, [FromBody] TicketUpdateRequest updateRequest)
+		public ActionResult Put(int id, [FromBody] TaskUpdateDto updateRequest)
 		{
 			_issueService.Update(id, updateRequest);
 			return NoContent();
@@ -68,7 +67,7 @@ namespace Issues.Manager.Api.Controllers
 
 		// DELETE: api/Ticket/5
 		[HttpDelete("{id}")]
-		[ProducesResponseType(200, Type = typeof(TicketDetailsModel))]
+		[ProducesResponseType(200, Type = typeof(TaskEntityDto))]
 		[ProducesResponseType(404)]
 		public ActionResult Delete(int id)
 		{

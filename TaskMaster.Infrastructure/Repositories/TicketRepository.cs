@@ -5,49 +5,49 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Issues.Manager.Infrastructure.Repositories;
 
-public class TicketRepository : RepositoryBase<Ticket>, ITaskRepository
+public class TicketRepository : RepositoryBase<TaskDomainEntity>, ITaskEntityRepository
 {
-    private readonly AppDbContext _dbContext;
-    private readonly IAuthenticationStateService _userIdProvider;
+	private readonly AppDbContext _dbContext;
+	private readonly IAuthenticationStateService _userIdProvider;
 
-    public TicketRepository(AppDbContext dbContext, IAuthenticationStateService userIdProvider) : base(dbContext)
-    {
-        _dbContext = dbContext;
-        _userIdProvider = userIdProvider;
-    }
+	public TicketRepository(AppDbContext dbContext, IAuthenticationStateService userIdProvider) : base(dbContext)
+	{
+		_dbContext = dbContext;
+		_userIdProvider = userIdProvider;
+	}
 
-    public Ticket? FindByCondition(Expression<Func<Ticket, bool>> expression, bool trackChanges = false)
-    {
-        return !trackChanges ?
-            _dbContext.Tickets
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
-                .Where(expression)
-                .AsNoTracking().SingleOrDefault() :
-            _dbContext.Set<Ticket>()
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
-                .Where(expression)
-                .SingleOrDefault();
-    }
+	public TaskDomainEntity? FindByCondition(Expression<Func<TaskDomainEntity, bool>> expression, bool trackChanges = false)
+	{
+		return !trackChanges ?
+			_dbContext.Tickets
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
+				.Where(expression)
+				.AsNoTracking().SingleOrDefault() :
+			_dbContext.Set<TaskDomainEntity>()
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
+				.Where(expression)
+				.SingleOrDefault();
+	}
 
-    public IQueryable<Ticket> FindRangeByCondition(Expression<Func<Ticket, bool>> expression, bool trackChanges = false)
-    {
-        return !trackChanges ?
-            _dbContext.Set<Ticket>()
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
-                .Where(expression)
-                .AsNoTracking() :
-            _dbContext.Set<Ticket>()
-                .Where(expression)
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
-    }
+	public IQueryable<TaskDomainEntity> FindRangeByCondition(Expression<Func<TaskDomainEntity, bool>> expression, bool trackChanges = false)
+	{
+		return !trackChanges ?
+			_dbContext.Set<TaskDomainEntity>()
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
+				.Where(expression)
+				.AsNoTracking() :
+			_dbContext.Set<TaskDomainEntity>()
+				.Where(expression)
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
+	}
 
-    public IQueryable<Ticket> FindAll(bool trackChanges = false)
-    {
-        return !trackChanges
-            ? _dbContext.Set<Ticket>()
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
-                .AsNoTracking()
-            : _dbContext.Set<Ticket>()
-                .Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
-    }
+	public IQueryable<TaskDomainEntity> FindAll(bool trackChanges = false)
+	{
+		return !trackChanges
+			? _dbContext.Set<TaskDomainEntity>()
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
+				.AsNoTracking()
+			: _dbContext.Set<TaskDomainEntity>()
+				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
+	}
 }

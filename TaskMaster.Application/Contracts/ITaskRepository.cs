@@ -2,7 +2,7 @@
 
 namespace Issues.Manager.Application.Contracts;
 
-public interface ITaskRepository : IRepositoryBase<Ticket>
+public interface ITaskEntityRepository : IRepositoryBase<TaskDomainEntity>
 {
-    
+
 }

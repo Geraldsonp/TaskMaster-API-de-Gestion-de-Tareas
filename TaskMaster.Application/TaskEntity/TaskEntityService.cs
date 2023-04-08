@@ -1,23 +1,23 @@
 using AutoMapper;
 using Issues.Manager.Application.Contracts;
-using Issues.Manager.Application.DTOs;
 using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Application.Models.Issue;
 using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
+using TaskMaster.Application.ExtensionMethods;
+using TaskMaster.Application.TaskEntity.Dtos;
 using TaskMaster.Domain.ValueObjects;
 
-namespace Issues.Manager.Application.Services.Issue;
+namespace TaskMaster.Application.TaskEntity;
 
-public class IssueService : IIssueService
+public class TaskEntityService : ITaskEntityService
 {
-	private readonly IRepositoryManager _repositoryManager;
+	private readonly IUnitOfWork _repositoryManager;
 	private readonly IMapper _mapper;
 
 	private readonly IAuthenticationStateService UserIdProvider;
 
-	public IssueService(
-		IRepositoryManager repositoryManager,
+	public TaskEntityService(
+		IUnitOfWork repositoryManager,
 		IMapper mapper, IAuthenticationStateService userIdProvider)
 	{
 		this.UserIdProvider = userIdProvider;
@@ -25,30 +25,30 @@ public class IssueService : IIssueService
 		_mapper = mapper;
 	}
 
-	public TicketDetailsModel Create(TicketCreateRequest ticketCreateRequest)
+	public TaskEntityDto Create(TaskCreateDto ticketCreateRequest)
 	{
 		var userId = UserIdProvider.GetCurrentUserId();
 
 
-		var issueToSave = _mapper.Map<Ticket>(ticketCreateRequest);
+		var issueToSave = _mapper.Map<TaskDomainEntity>(ticketCreateRequest);
 		issueToSave.UserId = userId;
 		_repositoryManager.TaskRepository.Create(issueToSave);
 		_repositoryManager.SaveChanges();
-		return _mapper.Map<TicketDetailsModel>(issueToSave);
+		return _mapper.Map<TaskEntityDto>(issueToSave);
 	}
 
-	public TicketDetailsModel GetById(int id)
+	public TaskEntityDto GetById(int id)
 	{
 		var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == id);
 		if (issue is null)
 		{
 			throw new IssueNotFoundException(id);
 		}
-		return _mapper.Map<TicketDetailsModel>(issue);
+		return _mapper.Map<TaskEntityDto>(issue);
 	}
 
 
-	public IEnumerable<TicketDetailsModel> GetAll(TicketFilters ticketFilters, Paggination paggingOptions)
+	public PagedResponse<TaskEntityDto> GetAll(TaskFilter ticketFilters, Paggination pagging)
 	{
 		var issues = _repositoryManager.TaskRepository.FindAll();
 
@@ -67,12 +67,12 @@ public class IssueService : IIssueService
 					ticket.Priority == ticketFilters.Priority);
 		}
 
-		var issuesDtos = _mapper.Map<IEnumerable<TicketDetailsModel>>(issues.Skip(paggingOptions.PageNumber * paggingOptions.PageSize).Take(paggingOptions.PageSize).ToList());
+		var response = issues.ToMappedPagedResponse<TaskDomainEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
 
-		return issuesDtos;
+		return response;
 	}
 
-	public void Update(int id, TicketUpdateRequest updateRequest)
+	public void Update(int id, TaskUpdateDto updateRequest)
 	{
 		var ticket = _repositoryManager.TaskRepository.FindByCondition(ticket => ticket.Id == id);
 

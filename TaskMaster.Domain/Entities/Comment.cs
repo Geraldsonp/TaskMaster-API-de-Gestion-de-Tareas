@@ -2,8 +2,8 @@
 
 public class Comment : BaseEntity
 {
-    public string? Content { get; set; }
-    public DateTime PostedDate { get; set; } = DateTime.Now;
-    public Ticket Ticket { get; set; }
+	public string? Content { get; set; }
+	public DateTime PostedDate { get; set; } = DateTime.Now;
+	public TaskDomainEntity Ticket { get; set; }
 
 }
