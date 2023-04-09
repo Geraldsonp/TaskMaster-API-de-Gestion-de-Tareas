@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TaskMaster.Application.Models;
 
 namespace Issues.Manager.Application.Interfaces;
 
 public interface ITokenManager
 {
-    Task<string> GenerateToken(IdentityUser? claims);
-    
+	Task<JwtToken> GenerateToken(IdentityUser? claims);
+
 }

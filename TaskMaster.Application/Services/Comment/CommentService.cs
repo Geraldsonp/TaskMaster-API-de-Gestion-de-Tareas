@@ -17,13 +17,13 @@ public class CommentService : ICommentService
 		_repositoryManager = repositoryManager;
 		_mapper = mapper;
 	}
-	public CommentResponse Create(CreateCommentRequest commentRequest, int issueId)
+	public CommentResponse Create(CreateCommentRequest commentRequest, int taskId)
 	{
-		var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == issueId, true);
+		var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == taskId, true);
 
 		if (issue is null)
 		{
-			throw new IssueNotFoundException(issueId);
+			throw new NotFoundException(nameof(TaskEntity), taskId);
 		}
 
 		var comment = _mapper.Map<Comment>(commentRequest);
@@ -44,7 +44,7 @@ public class CommentService : ICommentService
 
 		if (comment is null)
 		{
-			throw new IssueNotFoundException(commentId);
+			throw new NotFoundException(nameof(Comment), commentId);
 		}
 
 		_repositoryManager.CommentsRepository.Delete(comment);
@@ -56,7 +56,7 @@ public class CommentService : ICommentService
 
 		if (comment is null)
 		{
-			throw new IssueNotFoundException(commentId);
+			throw new NotFoundException(nameof(Comment), commentId);
 		}
 
 		comment.Content = updatedComment.Content;
@@ -74,7 +74,7 @@ public class CommentService : ICommentService
 
 		if (issue is null)
 		{
-			throw new IssueNotFoundException(issueId);
+			throw new NotFoundException(nameof(TaskEntity), issueId);
 		}
 
 		var comments = _repositoryManager.CommentsRepository

@@ -27,7 +27,7 @@ public static class MigrationHelper
 			.RuleFor(x => x.PostedDate, x => x.Date.RecentOffset(5, startDate).DateTime)
 			.RuleFor(x => x.Content, x => x.Lorem.Lines());
 
-			var ticketssFaker = new Faker<TaskDomainEntity>()
+			var ticketssFaker = new Faker<TaskEntity>()
 
 			.RuleFor(x => x.Comments, c => commentsFaker.Generate(5))
 			.RuleFor(x => x.CompletedAt, d => d.Date.Between(startDate, endDate).OrNull(d, 0.25f))

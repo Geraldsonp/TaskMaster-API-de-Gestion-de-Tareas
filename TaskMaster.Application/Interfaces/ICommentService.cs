@@ -1,6 +1,4 @@
 ﻿using Issues.Manager.Application.DTOs.Comment;
-using Issues.Manager.Domain.Entities;
-using Issues.Manager.Domain.ValueObjects;
 
 namespace Issues.Manager.Application.Services;
 

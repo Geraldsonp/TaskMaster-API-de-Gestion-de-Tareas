@@ -2,7 +2,7 @@
 
 namespace Issues.Manager.Application.Contracts;
 
-public interface ITaskEntityRepository : IRepositoryBase<TaskDomainEntity>
+public interface ITaskEntityRepository : IRepositoryBase<TaskEntity>
 {
 
 }

@@ -5,7 +5,7 @@ using TaskMaster.Api.Contracts.Responses;
 
 namespace Issues.Manager.Api.Controllers
 {
-	[Route("api/ticket/{ticketId:int}/[controller]")]
+	[Route("api/comments")]
 	[ApiController]
 	public class CommentController : ControllerBase
 	{
@@ -16,22 +16,22 @@ namespace Issues.Manager.Api.Controllers
 			_commentService = commentService;
 		}
 
-		[HttpGet]
+		[HttpGet(template: "{taskId:int}")]
 		[ProducesResponseType(200, Type = typeof(IEnumerable<CommentResponse>))]
-		public IActionResult GetAll(int ticketId)
+		public IActionResult GetAll(int taskId)
 		{
-			var comments = _commentService.Get(ticketId);
+			var comments = _commentService.Get(taskId);
 			return Ok(comments);
 		}
 
-		[HttpPost]
+		[HttpPost("{taskId:int}")]
 		[ProducesResponseType(200, Type = typeof(Response<CommentResponse>))]
 		[ProducesResponseType(422)]
 		public IActionResult Create(CreateCommentRequest comment, [FromRoute] int ticketId)
 		{
 			if (!ModelState.IsValid)
 			{
-				return UnprocessableEntity(comment);
+				return BadRequest(ModelState.ValidationState);
 			}
 			var commentResponse = _commentService.Create(comment, ticketId);
 			return Ok(new Response<CommentResponse>(commentResponse));
@@ -44,7 +44,7 @@ namespace Issues.Manager.Api.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return UnprocessableEntity(comment);
+				return BadRequest(ModelState.ValidationState);
 			}
 
 			var commentResponse = _commentService.Update(comment, commentId);

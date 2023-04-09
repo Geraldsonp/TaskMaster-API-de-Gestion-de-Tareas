@@ -1,7 +1,6 @@
 using AutoMapper;
 using Issues.Manager.Application.Contracts;
 using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Domain.Entities;
 using Issues.Manager.Domain.Exceptions;
 using TaskMaster.Application.ExtensionMethods;
 using TaskMaster.Application.TaskEntity.Dtos;
@@ -30,7 +29,7 @@ public class TaskEntityService : ITaskEntityService
 		var userId = UserIdProvider.GetCurrentUserId();
 
 
-		var issueToSave = _mapper.Map<TaskDomainEntity>(ticketCreateRequest);
+		var issueToSave = _mapper.Map<Issues.Manager.Domain.Entities.TaskEntity>(ticketCreateRequest);
 		issueToSave.UserId = userId;
 		_repositoryManager.TaskRepository.Create(issueToSave);
 		_repositoryManager.SaveChanges();
@@ -42,7 +41,7 @@ public class TaskEntityService : ITaskEntityService
 		var issue = _repositoryManager.TaskRepository.FindByCondition(i => i.Id == id);
 		if (issue is null)
 		{
-			throw new IssueNotFoundException(id);
+			throw new NotFoundException(nameof(TaskEntity), id);
 		}
 		return _mapper.Map<TaskEntityDto>(issue);
 	}
@@ -67,7 +66,7 @@ public class TaskEntityService : ITaskEntityService
 					ticket.Priority == ticketFilters.Priority);
 		}
 
-		var response = issues.ToMappedPagedResponse<TaskDomainEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
+		var response = issues.ToMappedPagedResponse<Issues.Manager.Domain.Entities.TaskEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
 
 		return response;
 	}
@@ -78,7 +77,7 @@ public class TaskEntityService : ITaskEntityService
 
 		if (ticket is null)
 		{
-			throw new IssueNotFoundException(id);
+			throw new NotFoundException(nameof(TaskEntity), id);
 		}
 
 		_mapper.Map(ticket, updateRequest);
@@ -95,7 +94,7 @@ public class TaskEntityService : ITaskEntityService
 
 		if (issueToDelete is null)
 		{
-			throw new IssueNotFoundException(id);
+			throw new NotFoundException(nameof(TaskEntity), id);
 		}
 
 		_repositoryManager.TaskRepository.Delete(issueToDelete);

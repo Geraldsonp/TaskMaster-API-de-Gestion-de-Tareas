@@ -4,6 +4,7 @@ using Issues.Manager.Application.Services.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Application.Models;
 
 namespace Issues.Manager.Api.Controllers;
 
@@ -21,14 +22,14 @@ public class UserController : ControllerBase
 
 	// POST: User/Register
 	[HttpPost]
-	public async Task<ActionResult<Response<string>>> RegisterUser([FromBody] UserRegisterModel userForRegistration)
+	public async Task<ActionResult<Response<JwtToken>>> RegisterUser([FromBody] UserRegisterModel userForRegistration)
 	{
 		var result = await _identityManager.Create(userForRegistration);
 
 		if (result.IsSuccess)
 		{
 			//Todo: create a token model with properties like expiry date
-			return Ok(result.Token);
+			return Ok(new Response<JwtToken>(result.Token));
 		}
 
 		foreach (var error in result.Errors)
@@ -49,6 +50,6 @@ public class UserController : ControllerBase
 			return Unauthorized(new Response<AuthenticationResult>(result));
 		}
 
-		return Ok(new Response<string>(result.Token));
+		return Ok(new Response<JwtToken>(result.Token));
 	}
 }

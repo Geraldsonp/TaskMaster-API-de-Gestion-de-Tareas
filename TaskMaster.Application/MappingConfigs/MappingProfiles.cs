@@ -11,9 +11,9 @@ public class MappingProfiles : Profile
 {
 	public MappingProfiles()
 	{
-		CreateMap<TaskDomainEntity, TaskEntityDto>();
-		CreateMap<TaskEntityDto, TaskDomainEntity>();
-		CreateMap<TaskCreateDto, TaskDomainEntity>();
+		CreateMap<TaskEntity, TaskEntityDto>();
+		CreateMap<TaskEntityDto, TaskEntity>();
+		CreateMap<TaskCreateDto, TaskEntity>();
 
 		//User
 		CreateMap<UserRegisterModel, IdentityUser>();

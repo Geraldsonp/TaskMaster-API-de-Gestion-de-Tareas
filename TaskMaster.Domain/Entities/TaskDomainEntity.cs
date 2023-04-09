@@ -3,7 +3,7 @@ using Issues.Manager.Domain.Enums;
 
 namespace Issues.Manager.Domain.Entities;
 
-public class TaskDomainEntity : BaseEntity
+public class TaskEntity : BaseEntity
 {
 	[Required(ErrorMessage = "Title can not be null.")]
 	[MaxLength(50, ErrorMessage = "Max lenght for name is 50 characters")]
