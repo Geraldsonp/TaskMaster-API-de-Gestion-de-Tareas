@@ -1,13 +1,13 @@
 using System.Net;
 using AutoMapper;
-using Issues.Manager.Api.Contracts;
-using Issues.Manager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using TaskMaster.Api.Contracts;
 using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Application.TaskEntity;
 using TaskMaster.Application.TaskEntity.Dtos;
 using TaskMaster.Domain.ValueObjects;
 
-namespace Issues.Manager.Api.Controllers
+namespace TaskMaster.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
@@ -15,11 +15,10 @@ namespace Issues.Manager.Api.Controllers
 	{
 		private readonly ITaskEntityService _issueService;
 		private readonly IMapper _mapper;
-		private string _userId;
 
-		public TaskController(ITaskEntityService issueService, IMapper mapper)
+		public TaskController(ITaskEntityService taskService, IMapper mapper)
 		{
-			_issueService = issueService;
+			_issueService = taskService;
 			_mapper = mapper;
 		}
 

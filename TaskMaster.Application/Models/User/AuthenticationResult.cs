@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TaskMaster.Application.Models;
 
-namespace Issues.Manager.Application.DTOs;
+namespace TaskMaster.Application.Models.User;
 
 public class AuthenticationResult
 {

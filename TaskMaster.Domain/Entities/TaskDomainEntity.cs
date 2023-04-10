@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Issues.Manager.Domain.Enums;
+using TaskMaster.Domain.Enums;
 
-namespace Issues.Manager.Domain.Entities;
+namespace TaskMaster.Domain.Entities;
 
 public class TaskEntity : BaseEntity
 {

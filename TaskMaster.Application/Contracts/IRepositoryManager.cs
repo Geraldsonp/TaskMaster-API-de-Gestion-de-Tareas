@@ -1,6 +1,6 @@
-﻿using Issues.Manager.Domain.Entities;
+﻿using TaskMaster.Domain.Entities;
 
-namespace Issues.Manager.Application.Contracts;
+namespace TaskMaster.Application.Contracts;
 
 public interface IUnitOfWork
 {

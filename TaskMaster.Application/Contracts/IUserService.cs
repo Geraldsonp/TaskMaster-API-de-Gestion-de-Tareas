@@ -1,11 +1,10 @@
-﻿using Issues.Manager.Application.Models.User;
-using Issues.Manager.Domain.Entities;
+﻿using TaskMaster.Application.Models.User;
 
-namespace Issues.Manager.Application.Contracts;
+namespace TaskMaster.Application.Contracts;
 
 public interface IUserService
 {
-    string CreateUser(UserRegisterModel user);
-    string LogIn(UserLogInModel logInModel, string password);
-    void LogOut();
+	string CreateUser(UserRegisterModel user);
+	string LogIn(UserLogInModel logInModel, string password);
+	void LogOut();
 }

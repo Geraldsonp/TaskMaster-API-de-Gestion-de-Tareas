@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Domain.Entities;
 
-namespace Issues.Manager.Infrastructure.Repositories;
+namespace TaskMaster.Infrastructure.Repositories;
 
 public class TicketRepository : RepositoryBase<TaskEntity>, ITaskEntityRepository
 {

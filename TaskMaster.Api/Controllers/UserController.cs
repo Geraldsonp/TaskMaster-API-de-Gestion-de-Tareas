@@ -1,12 +1,11 @@
-using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Models.User;
-using Issues.Manager.Application.Services.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Application.Interfaces;
 using TaskMaster.Application.Models;
+using TaskMaster.Application.Models.User;
 
-namespace Issues.Manager.Api.Controllers;
+namespace TaskMaster.Api.Controllers;
 
 [Route("api/[controller]")]
 [AllowAnonymous]

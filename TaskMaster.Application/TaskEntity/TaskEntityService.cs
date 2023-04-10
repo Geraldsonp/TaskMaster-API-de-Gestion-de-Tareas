@@ -1,9 +1,8 @@
 using AutoMapper;
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Domain.Exceptions;
+using TaskMaster.Application.Contracts;
 using TaskMaster.Application.ExtensionMethods;
 using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Domain.Exceptions;
 using TaskMaster.Domain.ValueObjects;
 
 namespace TaskMaster.Application.TaskEntity;
@@ -29,7 +28,7 @@ public class TaskEntityService : ITaskEntityService
 		var userId = UserIdProvider.GetCurrentUserId();
 
 
-		var issueToSave = _mapper.Map<Issues.Manager.Domain.Entities.TaskEntity>(ticketCreateRequest);
+		var issueToSave = _mapper.Map<Domain.Entities.TaskEntity>(ticketCreateRequest);
 		issueToSave.UserId = userId;
 		_repositoryManager.TaskRepository.Create(issueToSave);
 		_repositoryManager.SaveChanges();
@@ -66,7 +65,7 @@ public class TaskEntityService : ITaskEntityService
 					ticket.Priority == ticketFilters.Priority);
 		}
 
-		var response = issues.ToMappedPagedResponse<Issues.Manager.Domain.Entities.TaskEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
+		var response = issues.ToMappedPagedResponse<Domain.Entities.TaskEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
 
 		return response;
 	}

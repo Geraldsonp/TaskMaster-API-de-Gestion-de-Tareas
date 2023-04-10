@@ -1,11 +1,11 @@
-﻿using Issues.Manager.Application.DTOs.Comment;
+﻿using TaskMaster.Application.Models.Comment;
 
-namespace Issues.Manager.Application.Services;
+namespace TaskMaster.Application.Interfaces;
 
 public interface ICommentService
 {
-    IEnumerable<CommentResponse> Get(int issueId);
-    CommentResponse Create(CreateCommentRequest commentRequest, int issueId);
-    void Delete(int issueId);
-    CommentResponse Update(CreateCommentRequest comment, int issueId);
+	IEnumerable<CommentResponse> Get(int issueId);
+	CommentResponse Create(CreateCommentRequest commentRequest, int issueId);
+	void Delete(int issueId);
+	CommentResponse Update(CreateCommentRequest comment, int issueId);
 }

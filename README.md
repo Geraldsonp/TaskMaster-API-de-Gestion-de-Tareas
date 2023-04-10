@@ -24,6 +24,12 @@ al contruir este projecto pude ampliar mis conocimientos en cuanto a la organiza
 - AutoMapper
 - EF Core
 
+## Conceptos Aprendidos
+- REST Api
+- Filtering
+- Pagination
+- Api Security (JWT)
+
 ## Como instalar y correr el projecto
 
 Para correr el projecto simplemente clona el repo y connecta la base de datos para eso tendras que cambiar la cadena de conneccion en el appsettings.json.

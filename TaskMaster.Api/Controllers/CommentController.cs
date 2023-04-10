@@ -1,9 +1,9 @@
-using Issues.Manager.Application.DTOs.Comment;
-using Issues.Manager.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts.Responses;
+using TaskMaster.Application.Interfaces;
+using TaskMaster.Application.Models.Comment;
 
-namespace Issues.Manager.Api.Controllers
+namespace TaskMaster.Api.Controllers
 {
 	[Route("api/comments")]
 	[ApiController]

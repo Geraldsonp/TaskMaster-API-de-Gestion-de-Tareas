@@ -1,8 +1,6 @@
-﻿using Issues.Manager.Domain.Entities;
+﻿namespace TaskMaster.Application.Contracts;
 
-namespace Issues.Manager.Application.Contracts;
-
-public interface ITaskEntityRepository : IRepositoryBase<TaskEntity>
+public interface ITaskEntityRepository : IRepositoryBase<Domain.Entities.TaskEntity>
 {
 
 }

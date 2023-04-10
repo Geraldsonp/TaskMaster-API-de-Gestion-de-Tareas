@@ -1,4 +1,4 @@
-﻿namespace Issues.Manager.Domain.Entities;
+﻿namespace TaskMaster.Domain.Entities;
 
 public class Comment : BaseEntity
 {

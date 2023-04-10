@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Issues.Manager.Domain.Enums;
+using TaskMaster.Domain.Enums;
 
 namespace TaskMaster.Application.TaskEntity.Dtos;
 

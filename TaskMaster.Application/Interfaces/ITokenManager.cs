@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using TaskMaster.Application.Models;
 
-namespace Issues.Manager.Application.Interfaces;
+namespace TaskMaster.Application.Interfaces;
 
 public interface ITokenManager
 {

@@ -1,12 +1,10 @@
-﻿using Issues.Manager.Application.Contracts;
-using Issues.Manager.Infrastructure.DBConfiguration;
-using Issues.Manager.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Infrastructure.Repositories;
 
-namespace Issues.Manager.Infrastructure;
+namespace TaskMaster.Infrastructure;
 
 public static class DependencyInjection
 {

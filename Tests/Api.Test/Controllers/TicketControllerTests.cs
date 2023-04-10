@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using FluentAssertions;
-using Issues.Manager.Domain.Enums;
-using Issues.Manager.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Domain.Enums;
+using TaskMaster.Infrastructure;
+using TaskMaster.Manager.Infrastructure;
 using TicketManager.Test.Configuration;
 using Xunit;
 

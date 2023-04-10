@@ -1,10 +1,10 @@
 ﻿using Bogus;
-using Issues.Manager.Domain.Entities;
-using Issues.Manager.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TaskMaster.Domain.Entities;
+using TaskMaster.Domain.Enums;
 
-namespace Issues.Manager.Infrastructure.DBConfiguration;
+namespace TaskMaster.Infrastructure.DBConfiguration;
 
 public static class MigrationHelper
 {

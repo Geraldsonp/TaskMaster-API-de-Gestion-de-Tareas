@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Application.DTOs.Comment;
-using Issues.Manager.Domain.Entities;
-using Issues.Manager.Domain.Exceptions;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Application.Interfaces;
+using TaskMaster.Application.Models.Comment;
+using TaskMaster.Domain.Exceptions;
 
-namespace Issues.Manager.Application.Services;
+namespace TaskMaster.Application.Services.Comment;
 
 public class CommentService : ICommentService
 {
@@ -23,10 +23,10 @@ public class CommentService : ICommentService
 
 		if (issue is null)
 		{
-			throw new NotFoundException(nameof(TaskEntity), taskId);
+			throw new NotFoundException(nameof(Domain.Entities.TaskEntity), taskId);
 		}
 
-		var comment = _mapper.Map<Comment>(commentRequest);
+		var comment = _mapper.Map<Domain.Entities.Comment>(commentRequest);
 
 		issue.Comments.Add(comment);
 
@@ -44,7 +44,7 @@ public class CommentService : ICommentService
 
 		if (comment is null)
 		{
-			throw new NotFoundException(nameof(Comment), commentId);
+			throw new NotFoundException(nameof(Domain.Entities.Comment), commentId);
 		}
 
 		_repositoryManager.CommentsRepository.Delete(comment);
@@ -56,7 +56,7 @@ public class CommentService : ICommentService
 
 		if (comment is null)
 		{
-			throw new NotFoundException(nameof(Comment), commentId);
+			throw new NotFoundException(nameof(Domain.Entities.Comment), commentId);
 		}
 
 		comment.Content = updatedComment.Content;
@@ -74,7 +74,7 @@ public class CommentService : ICommentService
 
 		if (issue is null)
 		{
-			throw new NotFoundException(nameof(TaskEntity), issueId);
+			throw new NotFoundException(nameof(Domain.Entities.TaskEntity), issueId);
 		}
 
 		var comments = _repositoryManager.CommentsRepository

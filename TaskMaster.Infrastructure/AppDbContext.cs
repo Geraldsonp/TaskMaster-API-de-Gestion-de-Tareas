@@ -1,12 +1,12 @@
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Domain.Entities;
-using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Domain.Entities;
+using TaskMaster.Infrastructure.DBConfiguration;
 
-namespace Issues.Manager.Infrastructure;
+namespace TaskMaster.Infrastructure;
 
 public class AppDbContext : IdentityDbContext<IdentityUser>
 {

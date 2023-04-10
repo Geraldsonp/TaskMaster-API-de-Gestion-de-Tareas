@@ -1,6 +1,6 @@
-﻿namespace Issues.Manager.Domain.Enums;
+﻿namespace TaskMaster.Domain.Enums;
 
 public enum TicketType
 {
-    Feature, Bug, Documentation
+	Feature, Bug, Documentation
 }

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Issues.Manager.Domain.Entities;
+namespace TaskMaster.Domain.Entities;
 
 public class BaseEntity
 {
-    public int Id { get; set; }
+	public int Id { get; set; }
 
-    [Required]
-    public string UserId { get; set; }
+	[Required]
+	public string UserId { get; set; }
 }

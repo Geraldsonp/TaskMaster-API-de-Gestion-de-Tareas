@@ -1,11 +1,11 @@
-﻿using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Application.Services;
-using Issues.Manager.Application.Services.Identity;
-using Issues.Manager.Application.Services.Token;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using TaskMaster.Application.Interfaces;
+using TaskMaster.Application.Services.Comment;
+using TaskMaster.Application.Services.Identity;
+using TaskMaster.Application.Services.Token;
 using TaskMaster.Application.TaskEntity;
 
-namespace Issues.Manager.Application;
+namespace TaskMaster.Application;
 
 public static class BusinessDependenciesContainer
 {

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Issues.Manager.Api.Contracts;
-using Issues.Manager.Domain.Enums;
+using TaskMaster.Api.Contracts;
 using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Domain.Enums;
 
-namespace Issues.Manager.Api.MapProfiles;
+namespace TaskMaster.Api.MapProfiles;
 
 public class FilterProfiles : Profile
 {

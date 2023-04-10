@@ -1,10 +1,9 @@
-﻿using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Models.User;
+﻿using TaskMaster.Application.Models.User;
 
-namespace Issues.Manager.Application.Services.Identity;
+namespace TaskMaster.Application.Interfaces;
 
 public interface IIdentityManager
 {
-    Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel);
-    Task<AuthenticationResult> LogIn(UserLogInModel userForAuth);
+	Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel);
+	Task<AuthenticationResult> LogIn(UserLogInModel userForAuth);
 }

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Issues.Manager.Application.DTOs.Comment;
+namespace TaskMaster.Application.Models.Comment;
 
 public class CreateCommentRequest
 {
-    [Required(ErrorMessage = "Comment can not be null"), DataType(DataType.Text)]
-    public string? Content { get; set; }
+	[Required(ErrorMessage = "Comment can not be null"), DataType(DataType.Text)]
+	public string? Content { get; set; }
 }

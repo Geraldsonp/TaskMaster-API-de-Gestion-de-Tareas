@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Application.DTOs;
-using Issues.Manager.Application.Interfaces;
-using Issues.Manager.Application.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Application.Interfaces;
+using TaskMaster.Application.Models.User;
 
-namespace Issues.Manager.Application.Services.Identity;
+namespace TaskMaster.Application.Services.Identity;
 
 public class IdentityManager : IIdentityManager
 {

@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using Issues.Manager.Application.Contracts;
+using TaskMaster.Application.Contracts;
 
-namespace Issues.Manager.Api.Helpers;
+namespace TaskMaster.Api.Helpers;
 
 public class UserIdProvider : IAuthenticationStateService
 {
@@ -11,8 +11,8 @@ public class UserIdProvider : IAuthenticationStateService
 		_contextAccessor = contextAccessor;
 	}
 
-	public string GetCurrentUserId()
+	public string? GetCurrentUserId()
 	{
-		return _contextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		return _contextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? null;
 	}
 }

@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using Issues.Manager.Application.DTOs.Comment;
-using Issues.Manager.Application.Models.User;
-using Issues.Manager.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using TaskMaster.Application.Models.Comment;
+using TaskMaster.Application.Models.User;
 using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Domain.Entities;
 
-namespace Issues.Manager.Application.MappingConfigs;
+namespace TaskMaster.Application.MappingConfigs;
 
 public class MappingProfiles : Profile
 {
 	public MappingProfiles()
 	{
-		CreateMap<TaskEntity, TaskEntityDto>();
-		CreateMap<TaskEntityDto, TaskEntity>();
-		CreateMap<TaskCreateDto, TaskEntity>();
+		CreateMap<Domain.Entities.TaskEntity, TaskEntityDto>();
+		CreateMap<TaskEntityDto, Domain.Entities.TaskEntity>();
+		CreateMap<TaskCreateDto, Domain.Entities.TaskEntity>();
 
 		//User
 		CreateMap<UserRegisterModel, IdentityUser>();

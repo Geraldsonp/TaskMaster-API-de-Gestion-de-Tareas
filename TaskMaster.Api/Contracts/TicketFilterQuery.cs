@@ -1,6 +1,4 @@
-﻿using Issues.Manager.Domain.Enums;
-
-namespace Issues.Manager.Api.Contracts;
+﻿namespace TaskMaster.Api.Contracts;
 
 public class TicketFilterQuery
 {

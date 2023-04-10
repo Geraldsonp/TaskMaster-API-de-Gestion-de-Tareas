@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace Issues.Manager.Api.ServiceConfiguration;
+namespace TaskMaster.Api.ServiceConfiguration;
 
 public static class ServiceExtensions
 {

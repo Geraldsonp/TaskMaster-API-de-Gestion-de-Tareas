@@ -1,6 +1,6 @@
-﻿namespace Issues.Manager.Domain.Enums;
+﻿namespace TaskMaster.Domain.Enums;
 
 public enum Priority
 {
-    Low, Medium, High
+	Low, Medium, High
 }

@@ -1,11 +1,12 @@
-using Issues.Manager.Api.Helpers;
-using Issues.Manager.Api.Middleware;
-using Issues.Manager.Api.ServiceConfiguration;
-using Issues.Manager.Application;
-using Issues.Manager.Application.Contracts;
-using Issues.Manager.Infrastructure;
-using Issues.Manager.Infrastructure.DBConfiguration;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using TaskMaster.Api.Helpers;
+using TaskMaster.Api.Middleware;
+using TaskMaster.Api.ServiceConfiguration;
+using TaskMaster.Application;
+using TaskMaster.Application.Contracts;
+using TaskMaster.Infrastructure;
+using TaskMaster.Infrastructure.DBConfiguration;
+using TaskMaster.Manager.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddSingleton<IAuthenticationStateService, UserIdProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(typeof(BusinessDependenciesContainer), typeof(Program));
+builder.Services.AddAutoMapper(typeof(BusinessDependenciesContainer), typeof(TaskMaster.Api.Program));
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
@@ -50,6 +51,11 @@ app.MapControllers()
 
 app.Run();
 
-public partial class Program
+
+//To have access to this class in the test projects
+namespace TaskMaster.Api
 {
+	public partial class Program
+	{
+	}
 }

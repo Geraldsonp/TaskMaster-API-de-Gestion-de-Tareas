@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Issues.Manager.Api.Models;
-using Issues.Manager.Domain.Exceptions;
+using TaskMaster.Api.Models;
+using TaskMaster.Domain.Exceptions;
 
-namespace Issues.Manager.Api.Middleware;
+namespace TaskMaster.Api.Middleware;
 
 public class ExceptionMiddleware
 {
@@ -24,7 +24,7 @@ public class ExceptionMiddleware
 		catch (NotFoundException e)
 		{
 			_logger.LogError(e.Message);
-			await HandleIssueNotFountExceptionAsync(httpContext, e);
+			await HandleNotFountExceptionAsync(httpContext, e);
 		}
 		catch (Exception e)
 		{
@@ -34,7 +34,7 @@ public class ExceptionMiddleware
 
 
 	}
-	private async Task HandleIssueNotFountExceptionAsync(HttpContext context, Exception exception)
+	private async Task HandleNotFountExceptionAsync(HttpContext context, Exception exception)
 	{
 		context.Response.ContentType = "application/json";
 		context.Response.StatusCode = (int)HttpStatusCode.NotFound;

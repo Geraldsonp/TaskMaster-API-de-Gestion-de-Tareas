@@ -1,4 +1,4 @@
-﻿namespace Issues.Manager.Api.Contracts;
+﻿namespace TaskMaster.Api.Contracts;
 
 public class PagingQuery
 {

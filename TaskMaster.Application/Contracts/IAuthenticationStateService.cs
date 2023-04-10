@@ -1,7 +1,7 @@
-namespace Issues.Manager.Application.Contracts
+namespace TaskMaster.Application.Contracts
 {
-    public interface IAuthenticationStateService
-    {
-         string GetCurrentUserId();
-    }
+	public interface IAuthenticationStateService
+	{
+		string GetCurrentUserId();
+	}
 }

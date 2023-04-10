@@ -1,7 +1,7 @@
 ﻿using TaskMaster.Application.TaskEntity.Dtos;
 using TaskMaster.Domain.ValueObjects;
 
-namespace Issues.Manager.Application.Interfaces;
+namespace TaskMaster.Application.TaskEntity;
 
 public interface ITaskEntityService
 {
