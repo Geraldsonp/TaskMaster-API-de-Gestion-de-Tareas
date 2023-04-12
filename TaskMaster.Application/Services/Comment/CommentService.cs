@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using TaskMaster.Application.Contracts;
 using TaskMaster.Application.Interfaces;
 using TaskMaster.Application.Models.Comment;
@@ -9,13 +9,11 @@ namespace TaskMaster.Application.Services.Comment;
 public class CommentService : ICommentService
 {
 	private readonly IUnitOfWork _repositoryManager;
-	private readonly IMapper _mapper;
 
 
-	public CommentService(IUnitOfWork repositoryManager, IMapper mapper)
+	public CommentService(IUnitOfWork repositoryManager)
 	{
 		_repositoryManager = repositoryManager;
-		_mapper = mapper;
 	}
 	public CommentResponse Create(CreateCommentRequest commentRequest, int taskId)
 	{
@@ -26,13 +24,13 @@ public class CommentService : ICommentService
 			throw new NotFoundException(nameof(Domain.Entities.TaskEntity), taskId);
 		}
 
-		var comment = _mapper.Map<Domain.Entities.Comment>(commentRequest);
+		var comment = commentRequest.Adapt<Domain.Entities.Comment>();
 
 		issue.Comments.Add(comment);
 
 		_repositoryManager.SaveChanges();
 
-		var commentReponse = _mapper.Map<CommentResponse>(comment);
+		var commentReponse = comment.Adapt<CommentResponse>();
 
 		return commentReponse;
 	}
@@ -63,7 +61,7 @@ public class CommentService : ICommentService
 
 		_repositoryManager.SaveChanges();
 
-		var commentReponse = _mapper.Map<CommentResponse>(comment);
+		var commentReponse = comment.Adapt<CommentResponse>();
 
 		return commentReponse;
 	}
@@ -80,6 +78,6 @@ public class CommentService : ICommentService
 		var comments = _repositoryManager.CommentsRepository
 			.FindRangeByCondition(c => c.Ticket.Id == issueId).ToList();
 
-		return _mapper.Map<IEnumerable<CommentResponse>>(comments);
+		return comments.Adapt<IEnumerable<CommentResponse>>();
 	}
 }

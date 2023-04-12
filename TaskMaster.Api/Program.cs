@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using TaskMaster.Api.Helpers;
+using TaskMaster.Api.MapProfiles;
 using TaskMaster.Api.Middleware;
 using TaskMaster.Api.ServiceConfiguration;
 using TaskMaster.Application;
@@ -24,7 +25,7 @@ builder.Services.AddSingleton<IAuthenticationStateService, UserIdProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(typeof(BusinessDependenciesContainer), typeof(TaskMaster.Api.Program));
+builder.Services.RegisterMapsterConfiguration();
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();

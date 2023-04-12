@@ -1,5 +1,5 @@
 using System.Net;
-using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts;
 using TaskMaster.Api.Contracts.Responses;
@@ -14,25 +14,22 @@ namespace TaskMaster.Api.Controllers
 	public class TaskController : ControllerBase
 	{
 		private readonly ITaskEntityService _issueService;
-		private readonly IMapper _mapper;
 
-		public TaskController(ITaskEntityService taskService, IMapper mapper)
+		public TaskController(ITaskEntityService taskService)
 		{
 			_issueService = taskService;
-			_mapper = mapper;
 		}
 
 		// GET: api/Ticket
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public ActionResult<IEnumerable<TaskEntityDto>> Get([FromQuery] TicketFilterQuery ticketFilterQueryParameters, [FromQuery] Paggination pagging)
+		public ActionResult<IEnumerable<TaskEntityDto>> Get([FromQuery] TicketFilterQuery taskFilterQuery, [FromQuery] Paggination pagging)
 		{
 
-			var ticketFilter = _mapper.Map<TaskFilter>(ticketFilterQueryParameters);
+			var ticketFilter = taskFilterQuery.Adapt<TaskFilter>();
 
 			var tickets = _issueService.GetAll(ticketFilter, pagging);
-
-
+			
 			return Ok(new Response<PagedResponse<TaskEntityDto>>(tickets));
 		}
 
@@ -45,7 +42,7 @@ namespace TaskMaster.Api.Controllers
 			return Ok(issueDto);
 		}
 
-		// POST: api/Ticket
+		// POST: api/Task
 		[ProducesResponseType(200, Type = typeof(TaskEntityDto))]
 		[HttpPost]
 		public ActionResult<TaskEntityDto> Post(TaskCreateDto createdRequest)

@@ -1,4 +1,4 @@
-using AutoMapper;
+using Mapster;
 using TaskMaster.Application.Contracts;
 using TaskMaster.Application.ExtensionMethods;
 using TaskMaster.Application.TaskEntity.Dtos;
@@ -10,29 +10,32 @@ namespace TaskMaster.Application.TaskEntity;
 public class TaskEntityService : ITaskEntityService
 {
 	private readonly IUnitOfWork _repositoryManager;
-	private readonly IMapper _mapper;
 
 	private readonly IAuthenticationStateService UserIdProvider;
 
 	public TaskEntityService(
 		IUnitOfWork repositoryManager,
-		IMapper mapper, IAuthenticationStateService userIdProvider)
+		 IAuthenticationStateService userIdProvider)
 	{
 		this.UserIdProvider = userIdProvider;
 		this._repositoryManager = repositoryManager;
-		_mapper = mapper;
+		
 	}
 
-	public TaskEntityDto Create(TaskCreateDto ticketCreateRequest)
+	public TaskEntityDto Create(TaskCreateDto taskCreateRequest)
 	{
 		var userId = UserIdProvider.GetCurrentUserId();
 
 
-		var issueToSave = _mapper.Map<Domain.Entities.TaskEntity>(ticketCreateRequest);
+		var issueToSave = taskCreateRequest.Adapt<Domain.Entities.TaskEntity>();
+		
 		issueToSave.UserId = userId;
+		
 		_repositoryManager.TaskRepository.Create(issueToSave);
+		
 		_repositoryManager.SaveChanges();
-		return _mapper.Map<TaskEntityDto>(issueToSave);
+
+		return issueToSave.Adapt<TaskEntityDto>();
 	}
 
 	public TaskEntityDto GetById(int id)
@@ -42,7 +45,7 @@ public class TaskEntityService : ITaskEntityService
 		{
 			throw new NotFoundException(nameof(TaskEntity), id);
 		}
-		return _mapper.Map<TaskEntityDto>(issue);
+		return issue.Adapt<TaskEntityDto>();
 	}
 
 
@@ -65,7 +68,7 @@ public class TaskEntityService : ITaskEntityService
 					ticket.Priority == ticketFilters.Priority);
 		}
 
-		var response = issues.ToMappedPagedResponse<Domain.Entities.TaskEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber, _mapper);
+		var response = issues.ToMappedPagedResponse<Domain.Entities.TaskEntity, TaskEntityDto>(pagging.PageSize, pagging.PageNumber);
 
 		return response;
 	}
@@ -79,7 +82,7 @@ public class TaskEntityService : ITaskEntityService
 			throw new NotFoundException(nameof(TaskEntity), id);
 		}
 
-		_mapper.Map(ticket, updateRequest);
+		updateRequest.Adapt(ticket);
 
 		_repositoryManager.TaskRepository.Update(ticket);
 

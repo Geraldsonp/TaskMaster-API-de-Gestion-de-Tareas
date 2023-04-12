@@ -5,7 +5,7 @@ namespace TaskMaster.Application.TaskEntity;
 
 public interface ITaskEntityService
 {
-	TaskEntityDto Create(TaskCreateDto request);
+	TaskEntityDto Create(TaskCreateDto taskCreateRequest);
 	TaskEntityDto GetById(int id);
 	PagedResponse<TaskEntityDto> GetAll(TaskFilter taskFilter, Paggination paggination);
 	void Update(int id, TaskUpdateDto updateDto);

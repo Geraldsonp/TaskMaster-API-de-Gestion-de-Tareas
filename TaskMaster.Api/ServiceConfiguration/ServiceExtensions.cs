@@ -64,6 +64,7 @@ public static class ServiceExtensions
 			});
 		});
 	}
+	
 
 	public static void ConfigureFilters(this IServiceCollection services)
 	{

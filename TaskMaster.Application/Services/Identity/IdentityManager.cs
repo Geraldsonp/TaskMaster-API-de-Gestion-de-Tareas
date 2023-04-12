@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using TaskMaster.Application.Contracts;
@@ -9,26 +9,23 @@ namespace TaskMaster.Application.Services.Identity;
 
 public class IdentityManager : IIdentityManager
 {
-	private readonly IMapper _mapper;
 	private readonly ITokenManager _tokenManager;
 	private readonly UserManager<IdentityUser> _userManager;
 	private IdentityUser? _user;
 
 	public IdentityManager(
-		IMapper mapper,
 		ITokenManager tokenManager,
 		IUnitOfWork repositoryManager,
 		UserManager<IdentityUser> userManager,
 		IConfiguration configuration)
 	{
-		_mapper = mapper;
 		_tokenManager = tokenManager;
 		_userManager = userManager;
 	}
 
 	public async Task<AuthenticationResult> Create(UserRegisterModel userRegisterModel)
 	{
-		var user = _mapper.Map<IdentityUser>(userRegisterModel);
+		var user = userRegisterModel.Adapt<IdentityUser>();
 
 		var result = await _userManager.CreateAsync(user, userRegisterModel.Password);
 
