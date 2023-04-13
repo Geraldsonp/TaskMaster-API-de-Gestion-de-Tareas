@@ -50,15 +50,15 @@ namespace TaskMaster.Application.WorkItemFeature
 		}
 
 
-		public PagedResponse<WorkItemDto> GetAll(WorkItemFilter ticketFilters, Paggination pagging)
+		public PagedResponse<WorkItemDto> GetAll(WorkItemFilter ticketFilters, Pagination paging)
 		{
 			var issues = _repositoryManager.TaskRepository.FindAll();
 
-			if (ticketFilters.TicketType is not null)
+			if (ticketFilters.WorkItemType is not null)
 			{
 				issues =
 					issues.Where(ticket =>
-						ticket.WorkItemType == ticketFilters.TicketType);
+						ticket.WorkItemType == ticketFilters.WorkItemType);
 
 			}
 
@@ -69,7 +69,7 @@ namespace TaskMaster.Application.WorkItemFeature
 						ticket.Priority == ticketFilters.Priority);
 			}
 
-			var response = issues.ToMappedPagedResponse<Domain.Entities.WorkItem, WorkItemDto>(pagging.PageSize, pagging.PageNumber);
+			var response = issues.ToMappedPagedResponse<Domain.Entities.WorkItem, WorkItemDto>(paging);
 
 			return response;
 		}
@@ -84,7 +84,7 @@ namespace TaskMaster.Application.WorkItemFeature
 			}
 
 			updateRequest.Adapt(ticket);
-
+			
 			_repositoryManager.TaskRepository.Update(ticket);
 
 			_repositoryManager.SaveChanges();

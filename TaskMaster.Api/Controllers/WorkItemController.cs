@@ -23,7 +23,7 @@ namespace TaskMaster.Api.Controllers
 		// GET: api/Ticket
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public ActionResult<IEnumerable<WorkItemDto>> Get([FromQuery] WorkItemQueryFilter taskFilter, [FromQuery] Paggination pagging)
+		public ActionResult<IEnumerable<WorkItemDto>> Get([FromQuery] WorkItemQueryFilter taskFilter, [FromQuery] Pagination pagging)
 		{
 
 			var ticketFilter = taskFilter.Adapt<WorkItemFilter>();

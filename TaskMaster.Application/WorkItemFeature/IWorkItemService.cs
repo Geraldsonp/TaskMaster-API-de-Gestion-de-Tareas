@@ -7,7 +7,7 @@ public interface IWorkItemService
 {
 	WorkItemDto Create(WorkItemCreateDto workItemCreateRequest);
 	WorkItemDto GetById(int id);
-	PagedResponse<WorkItemDto> GetAll(WorkItemFilter workItemFilter, Paggination paggination);
+	PagedResponse<WorkItemDto> GetAll(WorkItemFilter workItemFilter, Pagination pagination);
 	void Update(int id, WorkItemUpdateDto updateDto);
 	void Delete(int id);
 }

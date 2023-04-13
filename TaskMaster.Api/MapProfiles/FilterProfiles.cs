@@ -11,10 +11,10 @@ public static class MapsterConfig
 	{
 		var config = TypeAdapterConfig<WorkItemQueryFilter, WorkItemFilter>
 			.NewConfig()
-			.IgnoreIf((src, dest) => string.IsNullOrEmpty(src.TicketType), dest => dest.TicketType)
+			.IgnoreIf((src, dest) => string.IsNullOrEmpty(src.TicketType), dest => dest.WorkItemType)
 			.IgnoreIf((src, dest) => string.IsNullOrEmpty(src.Priority), dest => dest.Priority)
 			.Map(dest => dest.Priority, src => Enum.Parse(typeof(Priority), src.Priority, true))
-			.Map(dest => dest.TicketType, src => Enum.Parse(typeof(WorkItemType), src.TicketType, true));
+			.Map(dest => dest.WorkItemType, src => Enum.Parse(typeof(WorkItemType), src.TicketType, true));
 		
 		
 		

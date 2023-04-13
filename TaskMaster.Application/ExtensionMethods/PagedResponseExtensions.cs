@@ -6,7 +6,7 @@ namespace TaskMaster.Application.ExtensionMethods
 	public static class PagedResponseExtensions
 	{
 
-		public static PagedResponse<TDest> ToMappedPagedResponse<Tsource, TDest>(this IQueryable<Tsource> source, int pageSize, int pageNumber)
+		public static PagedResponse<TDest> ToMappedPagedResponse<Tsource, TDest>(this IQueryable<Tsource> source, Pagination paging)
 		{
 			var count = source.Count();
 
@@ -14,10 +14,10 @@ namespace TaskMaster.Application.ExtensionMethods
 			return new PagedResponse<TDest>
 			{
 				TotalRecords = count,
-				TotalPages = (int)Math.Ceiling(count / (double)pageSize),
-				HasNext = count - (pageNumber * pageSize) > 0,
-				HasPrevious = (pageNumber * pageSize) > pageSize,
-				Items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList().Adapt<IEnumerable<TDest>>()
+				TotalPages = (int)Math.Ceiling(count / (double)paging.PageSize),
+				HasNext = count - (paging.PageNumber * paging.PageSize) > 0,
+				HasPrevious = (paging.PageNumber * paging.PageSize) > paging.PageSize,
+				Items = source.Skip((paging.PageNumber - 1) * paging.PageSize).Take(paging.PageSize).ToList().Adapt<IEnumerable<TDest>>()
 			};
 		}
 	}
