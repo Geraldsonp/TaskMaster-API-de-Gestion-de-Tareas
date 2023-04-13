@@ -2,15 +2,11 @@
 using Swashbuckle.AspNetCore.Annotations;
 using TaskMaster.Domain.Enums;
 
-namespace TaskMaster.Application.TaskEntity.Dtos;
+namespace TaskMaster.Application.WorkItemFeature.Dtos;
 
-[SwaggerSchema(Required = new[] { "Ticket" }, Title = "Ticket")]
 
-public class TaskEntityDto
+public class WorkItemUpdateDto
 {
-	[SwaggerSchema("The Ticket identifier", ReadOnly = true)]
-	public int Id { get; set; }
-
 	[SwaggerSchema("The Ticket Title")]
 	[Required(ErrorMessage = "Title can not be null.")]
 	[MaxLength(50, ErrorMessage = "Max lenght for Title is 50 characters")]
@@ -23,21 +19,9 @@ public class TaskEntityDto
 
 
 	[Required, Range(0, 3, ErrorMessage = "Ticket priority does not exist")]
-	public Priority Priority { get; set; }
+	public Priority? Priority { get; set; }
 
 
 	[Required, Range(0, 3, ErrorMessage = "Ticket type does not exist")]
-	public TicketType TicketType { get; set; }
-
-
-	[SwaggerSchema("The Ticket Creation Date", ReadOnly = true)]
-	public DateTime Created { get; init; }
-
-
-	[SwaggerSchema("The Ticket Completion Date ", ReadOnly = true)]
-	public DateTime? CompletedAt { get; set; }
-
-	public string UserId { get; set; }
-
-	public bool IsCompleted;
+	public WorkItemType? TicketType { get; set; }
 }

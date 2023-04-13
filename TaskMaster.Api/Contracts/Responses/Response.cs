@@ -23,4 +23,11 @@ namespace TaskMaster.Api.Contracts.Responses
 			IsSucess = false;
 		}
 	}
+
+	public class Response
+	{
+		public bool IsSucess { get; set; }
+		public string? ErrorMessage { get; set; }
+		public Object Data { get; set; }
+	}
 }

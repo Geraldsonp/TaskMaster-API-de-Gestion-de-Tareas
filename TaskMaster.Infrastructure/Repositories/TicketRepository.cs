@@ -5,7 +5,7 @@ using TaskMaster.Domain.Entities;
 
 namespace TaskMaster.Infrastructure.Repositories;
 
-public class TicketRepository : RepositoryBase<TaskEntity>, ITaskEntityRepository
+public class TicketRepository : RepositoryBase<WorkItem>, ITaskEntityRepository
 {
 	private readonly AppDbContext _dbContext;
 	private readonly IAuthenticationStateService _userIdProvider;
@@ -16,38 +16,38 @@ public class TicketRepository : RepositoryBase<TaskEntity>, ITaskEntityRepositor
 		_userIdProvider = userIdProvider;
 	}
 
-	public TaskEntity? FindByCondition(Expression<Func<TaskEntity, bool>> expression, bool trackChanges = false)
+	public WorkItem? FindByCondition(Expression<Func<WorkItem, bool>> expression, bool trackChanges = false)
 	{
 		return !trackChanges ?
 			_dbContext.Tickets
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
 				.Where(expression)
 				.AsNoTracking().SingleOrDefault() :
-			_dbContext.Set<TaskEntity>()
+			_dbContext.Set<WorkItem>()
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
 				.Where(expression)
 				.SingleOrDefault();
 	}
 
-	public IQueryable<TaskEntity> FindRangeByCondition(Expression<Func<TaskEntity, bool>> expression, bool trackChanges = false)
+	public IQueryable<WorkItem> FindRangeByCondition(Expression<Func<WorkItem, bool>> expression, bool trackChanges = false)
 	{
 		return !trackChanges ?
-			_dbContext.Set<TaskEntity>()
+			_dbContext.Set<WorkItem>()
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
 				.Where(expression)
 				.AsNoTracking() :
-			_dbContext.Set<TaskEntity>()
+			_dbContext.Set<WorkItem>()
 				.Where(expression)
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
 	}
 
-	public IQueryable<TaskEntity> FindAll(bool trackChanges = false)
+	public IQueryable<WorkItem> FindAll(bool trackChanges = false)
 	{
 		return !trackChanges
-			? _dbContext.Set<TaskEntity>()
+			? _dbContext.Set<WorkItem>()
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId())
 				.AsNoTracking()
-			: _dbContext.Set<TaskEntity>()
+			: _dbContext.Set<WorkItem>()
 				.Where(ticket => ticket.UserId == _userIdProvider.GetCurrentUserId());
 	}
 }

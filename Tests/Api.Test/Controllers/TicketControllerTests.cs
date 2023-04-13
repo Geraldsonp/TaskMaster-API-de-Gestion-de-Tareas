@@ -13,10 +13,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
-using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Application.WorkItemFeature.Dtos;
 using TaskMaster.Domain.Enums;
 using TaskMaster.Infrastructure;
-using TaskMaster.Manager.Infrastructure;
 using TicketManager.Test.Configuration;
 using Xunit;
 
@@ -50,10 +49,10 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 	public async Task CreateTicket_ReturnsBadRequest_WhenInvalidData()
 	{
 		//Arrange
-		var request = new TaskCreateDto
+		var request = new WorkItemCreateDto
 		{
 			Priority = Priority.High,
-			TicketType = TicketType.Bug,
+			WorkItemType = WorkItemType.Bug,
 			Title = string.Empty
 		};
 
@@ -69,11 +68,11 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 	public async Task CreateTicket_ReturnsCreated_WhenValidData()
 	{
 		//Arrange
-		var request = new TaskCreateDto
+		var request = new WorkItemCreateDto
 		{
 			Description = "testing",
 			Priority = Priority.High,
-			TicketType = TicketType.Bug,
+			WorkItemType = WorkItemType.Bug,
 			Title = "Test Ticket"
 		};
 
@@ -99,7 +98,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		//Act
 		var response = await _httpClient.GetAsync("api/Ticket");
 		var responseString = response.Content.ReadAsStringAsync();
-		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -127,7 +126,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		//Arrange
 		if (_user?.Id != null)
 			await CreateTicketsForCurrentUser(_user?.Id, 10);
-		var queryParameters = new TaskFilter()
+		var queryParameters = new WorkItemFilter()
 		{
 			Priority = Priority.High
 		};
@@ -140,7 +139,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		//Act
 		var response = await _httpClient.GetAsync("api/Ticket?priority=High");
 		var responseString = response.Content.ReadAsStringAsync();
-		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -154,7 +153,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		if (_user?.Id != null)
 			await CreateTicketsForCurrentUser(_user?.Id, 10);
 
-		var tasks = _context.Tickets.ToList().Where(task => task.TicketType == TicketType.Feature);
+		var tasks = _context.Tickets.ToList().Where(task => task.WorkItemType == WorkItemType.Feature);
 		var tasksCount = tasks.Count();
 
 
@@ -162,7 +161,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		//Act
 		var response = await _httpClient.GetAsync("api/Ticket?ticketType=Feature");
 		var responseString = response.Content.ReadAsStringAsync();
-		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -176,13 +175,13 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		if (_user?.Id != null)
 			await CreateTicketsForCurrentUser(_user?.Id, 10);
 
-		var tasks = _context.Tickets.ToList().Where(task => task.TicketType == TicketType.Bug && task.Priority == Priority.Low);
+		var tasks = _context.Tickets.ToList().Where(task => task.WorkItemType == WorkItemType.Bug && task.Priority == Priority.Low);
 		var tasksCount = tasks.Count();
 
 		//Act
 		var response = await _httpClient.GetAsync("api/Ticket?ticketType=Bug&priority=Low");
 		var responseString = response.Content.ReadAsStringAsync();
-		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await response.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//assert
 		response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -199,7 +198,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		//Act
 		var response = await _httpClient.GetAsync($"api/Ticket/{4}");
 		var responseString = response.Content.ReadAsStringAsync();
-		var taskObject = await response.Content.ReadFromJsonAsync<TaskEntityDto>();
+		var taskObject = await response.Content.ReadFromJsonAsync<WorkItemDto>();
 
 		//Assert
 		response.IsSuccessStatusCode.Should().BeTrue();
@@ -207,15 +206,15 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 	}
 
 	[Theory, AutoData]
-	public async Task UpdateTicket_WhenGivenValidData_UpdatesModelReturns200Ok(string description, TicketType ticketType, Priority priority, string title)
+	public async Task UpdateTicket_WhenGivenValidData_UpdatesModelReturns200Ok(string description, WorkItemType workItemType, Priority priority, string title)
 	{
 		//Arrange
 		await CreateTicketsForCurrentUser(_user.Id, 3);
-		var ticketDetails = await _httpClient.GetFromJsonAsync<TaskEntityDto>($"api/Ticket/{2}");
-		var updateRequest = new TaskUpdateDto()
+		var ticketDetails = await _httpClient.GetFromJsonAsync<WorkItemDto>($"api/Ticket/{2}");
+		var updateRequest = new WorkItemUpdateDto()
 		{
 			Description = description,
-			TicketType = ticketType,
+			TicketType = workItemType,
 			Priority = priority,
 			Title = title
 		};
@@ -225,9 +224,9 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 
 		var getResponse = await _httpClient.GetAsync($"api/Ticket/{2}");
 		getResponse.IsSuccessStatusCode.Should().BeTrue();
-		var ticketDetailsUpdated = await getResponse.Content.ReadFromJsonAsync<TaskEntityDto>();
+		var ticketDetailsUpdated = await getResponse.Content.ReadFromJsonAsync<WorkItemDto>();
 
-		ticketDetailsUpdated.TicketType.Should().Be(ticketType);
+		ticketDetailsUpdated.WorkItemType.Should().Be(workItemType);
 		ticketDetailsUpdated.Priority.Should().Be(priority);
 		ticketDetailsUpdated.Description.Should().Be(description);
 		ticketDetailsUpdated.Title.Should().Be(title);
@@ -248,7 +247,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		var responseString = deleteResponse.Content.ReadAsStringAsync();
 
 		var getTicketsResponse = await _httpClient.GetAsync("api/Ticket");
-		var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//Assert
 		deleteResponse.IsSuccessStatusCode.Should().BeTrue();
@@ -269,7 +268,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 		var responseString = deleteResponse.Content.ReadAsStringAsync();
 
 		var getTicketsResponse = await _httpClient.GetAsync("api/Ticket");
-		var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<TaskEntityDto>>();
+		var tickets = await getTicketsResponse.Content.ReadFromJsonAsync<IEnumerable<WorkItemDto>>();
 
 		//Assert
 		deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -281,7 +280,7 @@ public class TicketControllerTests : IClassFixture<WebApplicationFactory<Program
 	private async Task CreateTicketsForCurrentUser(string userId, int count)
 	{
 		var autoFixture = new Fixture();
-		var tickets = autoFixture.Build<TaskCreateDto>()
+		var tickets = autoFixture.Build<WorkItemCreateDto>()
 			.CreateMany(count);
 
 		foreach (var request in tickets)

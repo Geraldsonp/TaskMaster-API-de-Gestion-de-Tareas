@@ -3,19 +3,19 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using TaskMaster.Api.Contracts;
 using TaskMaster.Api.Contracts.Responses;
-using TaskMaster.Application.TaskEntity;
-using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Application.WorkItemFeature;
+using TaskMaster.Application.WorkItemFeature.Dtos;
 using TaskMaster.Domain.ValueObjects;
 
 namespace TaskMaster.Api.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/work-items")]
 	[ApiController]
-	public class TaskController : ControllerBase
+	public class WorkItemController : ControllerBase
 	{
-		private readonly ITaskEntityService _issueService;
+		private readonly IWorkItemService _issueService;
 
-		public TaskController(ITaskEntityService taskService)
+		public WorkItemController(IWorkItemService taskService)
 		{
 			_issueService = taskService;
 		}
@@ -23,29 +23,29 @@ namespace TaskMaster.Api.Controllers
 		// GET: api/Ticket
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public ActionResult<IEnumerable<TaskEntityDto>> Get([FromQuery] TicketFilterQuery taskFilterQuery, [FromQuery] Paggination pagging)
+		public ActionResult<IEnumerable<WorkItemDto>> Get([FromQuery] WorkItemQueryFilter taskFilter, [FromQuery] Paggination pagging)
 		{
 
-			var ticketFilter = taskFilterQuery.Adapt<TaskFilter>();
+			var ticketFilter = taskFilter.Adapt<WorkItemFilter>();
 
 			var tickets = _issueService.GetAll(ticketFilter, pagging);
 			
-			return Ok(new Response<PagedResponse<TaskEntityDto>>(tickets));
+			return Ok(new Response<PagedResponse<WorkItemDto>>(tickets));
 		}
 
 		[HttpGet("{id}", Name = "GetById")]
-		[ProducesResponseType(200, Type = typeof(Response<TaskEntityDto>))]
+		[ProducesResponseType(200, Type = typeof(Response<WorkItemDto>))]
 		[ProducesResponseType(404)]
-		public ActionResult<TaskEntityDto> Get(int id)
+		public ActionResult<WorkItemDto> Get(int id)
 		{
 			var issueDto = _issueService.GetById(id);
 			return Ok(issueDto);
 		}
 
 		// POST: api/Task
-		[ProducesResponseType(200, Type = typeof(TaskEntityDto))]
+		[ProducesResponseType(200, Type = typeof(WorkItemDto))]
 		[HttpPost]
-		public ActionResult<TaskEntityDto> Post(TaskCreateDto createdRequest)
+		public ActionResult<WorkItemDto> Post(WorkItemCreateDto createdRequest)
 		{
 			var result = _issueService.Create(createdRequest);
 			return CreatedAtRoute("GetById", new { id = result.Id }, result);
@@ -55,7 +55,7 @@ namespace TaskMaster.Api.Controllers
 		[HttpPut("{id}")]
 		[ProducesResponseType((int)HttpStatusCode.NoContent)]
 		[ProducesResponseType((int)HttpStatusCode.NotFound)]
-		public ActionResult Put(int id, [FromBody] TaskUpdateDto updateRequest)
+		public ActionResult Put(int id, [FromBody] WorkItemUpdateDto updateRequest)
 		{
 			_issueService.Update(id, updateRequest);
 			return NoContent();
@@ -63,7 +63,7 @@ namespace TaskMaster.Api.Controllers
 
 		// DELETE: api/Ticket/5
 		[HttpDelete("{id}")]
-		[ProducesResponseType(200, Type = typeof(TaskEntityDto))]
+		[ProducesResponseType(200, Type = typeof(WorkItemDto))]
 		[ProducesResponseType(404)]
 		public ActionResult Delete(int id)
 		{

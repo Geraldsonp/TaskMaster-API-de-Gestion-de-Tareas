@@ -1,6 +1,6 @@
 ﻿namespace TaskMaster.Domain.Enums;
 
-public enum TicketType
+public enum WorkItemType
 {
 	Feature, Bug, Documentation
 }

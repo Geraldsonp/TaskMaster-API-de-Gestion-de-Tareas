@@ -27,7 +27,7 @@ public static class MigrationHelper
 			.RuleFor(x => x.PostedDate, x => x.Date.RecentOffset(5, startDate).DateTime)
 			.RuleFor(x => x.Content, x => x.Lorem.Lines());
 
-			var ticketssFaker = new Faker<TaskEntity>()
+			var ticketssFaker = new Faker<WorkItem>()
 
 			.RuleFor(x => x.Comments, c => commentsFaker.Generate(5))
 			.RuleFor(x => x.CompletedAt, d => d.Date.Between(startDate, endDate).OrNull(d, 0.25f))
@@ -35,7 +35,7 @@ public static class MigrationHelper
 			.RuleFor(x => x.Created, d => d.Date.Between(endDate.AddMonths(-1), endDate.AddMonths(-10)))
 			.RuleFor(x => x.IsCompleted, c => c.PickRandom(new[] { true, false }))
 			.RuleFor(x => x.Priority, c => c.PickRandom(new[] { Priority.High, Priority.Low, Priority.Medium }))
-			.RuleFor(x => x.TicketType, c => c.PickRandom(new[] { TicketType.Bug, TicketType.Feature, TicketType.Documentation }))
+			.RuleFor(x => x.WorkItemType, c => c.PickRandom(new[] { WorkItemType.Bug, WorkItemType.Feature, WorkItemType.Documentation }))
 			.RuleFor(x => x.Title, c => c.Name.JobType())
 			.RuleFor(x => x.UserId, c => userId);
 

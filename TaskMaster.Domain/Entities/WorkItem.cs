@@ -3,7 +3,7 @@ using TaskMaster.Domain.Enums;
 
 namespace TaskMaster.Domain.Entities;
 
-public class TaskEntity : BaseEntity
+public class WorkItem : BaseEntity
 {
 	[Required(ErrorMessage = "Title can not be null.")]
 	[MaxLength(50, ErrorMessage = "Max lenght for name is 50 characters")]
@@ -14,7 +14,7 @@ public class TaskEntity : BaseEntity
 	[Required, Range(0, 3, ErrorMessage = "Ticket priority does not exist")]
 	public Priority Priority { get; set; }
 	[Required, Range(0, 3, ErrorMessage = "Ticket type does not exist")]
-	public TicketType TicketType { get; set; }
+	public WorkItemType WorkItemType { get; set; }
 	public DateTime Created { get; init; }
 	public DateTime? CompletedAt { get; set; }
 	private bool isCompleted;

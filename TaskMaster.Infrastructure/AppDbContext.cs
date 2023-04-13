@@ -20,7 +20,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
 		_userIdProvider = userIdProvider;
 	}
 
-	public DbSet<TaskEntity> Tickets { get; set; }
+	public DbSet<WorkItem> Tickets { get; set; }
 
 	public DbSet<Comment> Comments { get; set; }
 
@@ -30,7 +30,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
 
 		base.OnModelCreating(modelBuilder);
 		modelBuilder.ApplyConfiguration(new RoleConfiguration());
-		modelBuilder.Entity<TaskEntity>().HasQueryFilter(x => x.UserId == _userIdProvider.GetCurrentUserId());
+		modelBuilder.Entity<WorkItem>().HasQueryFilter(x => x.UserId == _userIdProvider.GetCurrentUserId());
 		modelBuilder.Entity<Comment>().HasQueryFilter(x => x.UserId == _userIdProvider.GetCurrentUserId());
 		modelBuilder.SeedDb();
 	}

@@ -21,7 +21,7 @@ public class CommentService : ICommentService
 
 		if (issue is null)
 		{
-			throw new NotFoundException(nameof(Domain.Entities.TaskEntity), taskId);
+			throw new NotFoundException(nameof(Domain.Entities.WorkItem), taskId);
 		}
 
 		var comment = commentRequest.Adapt<Domain.Entities.Comment>();
@@ -72,7 +72,7 @@ public class CommentService : ICommentService
 
 		if (issue is null)
 		{
-			throw new NotFoundException(nameof(Domain.Entities.TaskEntity), issueId);
+			throw new NotFoundException(nameof(Domain.Entities.WorkItem), issueId);
 		}
 
 		var comments = _repositoryManager.CommentsRepository

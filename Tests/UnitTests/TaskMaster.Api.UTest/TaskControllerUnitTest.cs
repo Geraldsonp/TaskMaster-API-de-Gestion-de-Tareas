@@ -1,9 +1,8 @@
-using System.Reflection;
 using FluentAssertions;
 using Moq;
 using TaskMaster.Api.Controllers;
-using TaskMaster.Application.TaskEntity;
-using TaskMaster.Application.TaskEntity.Dtos;
+using TaskMaster.Application.WorkItemFeature;
+using TaskMaster.Application.WorkItemFeature.Dtos;
 using TaskMaster.Domain.Enums;
 using TaskMaster.Domain.ValueObjects;
 
@@ -11,26 +10,26 @@ namespace TaskMaster.Api.UTests;
 
 public class TaskControllerUnitTest
 {
-    private Mock<ITaskEntityService> _taskService;
-    private TaskController? _taskController;
+    private Mock<IWorkItemService> _taskService;
+    private WorkItemController? _taskController;
     public static IEnumerable<Object[]> goodData = new[]
     {
 	    new object[]
 	    {
-		    new TaskCreateDto()
+		    new WorkItemCreateDto()
 		    {
 			    Description = "Test",
 			    Title = "Test",
 			    Priority = Priority.High,
-			    TicketType = TicketType.Bug
+			    WorkItemType = WorkItemType.Bug
 		    },
-		    new TaskEntityDto()
+		    new WorkItemDto()
 		    {
 			    Id = 1,
 			    Description = "Test",
 			    Title = "Test",
 			    Priority = Priority.High,
-			    TicketType = TicketType.Bug
+			    WorkItemType = WorkItemType.Bug
 		    },
 		    
 	    }
@@ -38,16 +37,16 @@ public class TaskControllerUnitTest
 
     public TaskControllerUnitTest()
     {
-	    _taskService = new Mock<ITaskEntityService>();
+	    _taskService = new Mock<IWorkItemService>();
     }
     
     [Theory]
     [MemberData(nameof(goodData))]
-    public void CreateTask_ShouldReturn_CorrectStatusCode(TaskCreateDto actual, TaskEntityDto expected)
+    public void CreateTask_ShouldReturn_CorrectStatusCode(WorkItemCreateDto actual, WorkItemDto expected)
     {
-	    _taskService.Setup(service => service.Create(It.IsAny<TaskCreateDto>())).Returns(expected);
+	    _taskService.Setup(service => service.Create(It.IsAny<WorkItemCreateDto>())).Returns(expected);
 		
-	    _taskController = new TaskController(_taskService.Object);
+	    _taskController = new WorkItemController(_taskService.Object);
 	    
 	    //Act
 	    var result = _taskController.Post(actual);
@@ -62,9 +61,9 @@ public class TaskControllerUnitTest
 	{
 		
 		
-		_taskService.Setup(service => service.GetAll(It.IsAny<TaskFilter>(), It.IsAny<Paggination>()))
-			.Returns(new PagedResponse<TaskEntityDto>());
+		_taskService.Setup(service => service.GetAll(It.IsAny<WorkItemFilter>(), It.IsAny<Paggination>()))
+			.Returns(new PagedResponse<WorkItemDto>());
 		
-		_taskController = new TaskController(_taskService.Object);
+		_taskController = new WorkItemController(_taskService.Object);
 	}
 }

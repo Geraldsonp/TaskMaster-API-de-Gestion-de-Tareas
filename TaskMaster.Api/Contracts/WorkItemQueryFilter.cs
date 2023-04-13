@@ -4,7 +4,7 @@ using TaskMaster.Domain.Enums;
 
 namespace TaskMaster.Api.Contracts;
 
-public class TicketFilterQuery
+public class WorkItemQueryFilter
 {
 	[AllowedValues(Values = new [] { "Low","Medium","High" })]
 	public string? Priority { get; set; }
